@@ -1,7 +1,102 @@
-Hello from
- ____        _        
-|  _ \ _   _| | _____ 
-| | | | | | | |/ / _ \
-| |_| | |_| |   <  __/
-|____/ \__,_|_|\_\___|
+____________________________________________________________
+ Hello! I'm Revel
+ What can I do for you?
+____________________________________________________________
 
+____________________________________________________________
+Got it. I've added this task: 
+[T][ ] read book
+Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] read book
+____________________________________________________________
+____________________________________________________________
+ Nice! I've marked this task as done:
+  [T][X] read book
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][X] read book
+____________________________________________________________
+____________________________________________________________
+ OK, I've marked this task as not done yet:
+  [T][ ] read book
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] read book
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task: 
+[D][ ] return book (by: Sunday)
+Now you have 2 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] read book
+2.[D][ ] return book (by: Sunday)
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task: 
+[E][ ] project meeting (from: Mon 2pm to: 4pm)
+Now you have 3 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+ Nice! I've marked this task as done:
+  [D][X] return book (by: Sunday)
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] read book
+2.[D][X] return book (by: Sunday)
+3.[E][ ] project meeting (from: Mon 2pm to: 4pm)
+____________________________________________________________
+____________________________________________________________
+ OK, I've marked this task as not done yet:
+  [D][ ] return book (by: Sunday)
+____________________________________________________________
+Available Commands: help, list, todo, event, deadline, mark, unmark, exit, bye
+____________________________________________________________
+ Please enter a command. Type help for a list of commands available to you.
+____________________________________________________________
+____________________________________________________________
+ Sorry! I am unable to assist you with that.
+Type 'help' for a list of commands available to you.
+____________________________________________________________
+____________________________________________________________
+ Sorry, but the description of todo cannot be empty.
+Usage: todo <description>
+____________________________________________________________
+____________________________________________________________
+ Sorry, but the description of deadline cannot be empty.
+Usage: deadline <description> /by <date/time>
+____________________________________________________________
+____________________________________________________________
+ Sorry, but the format used is invalid.
+Usage: deadline <description> /by <date/time>
+____________________________________________________________
+____________________________________________________________
+ Sorry, but the description of event cannot be empty.
+Usage: event <description> /from <start date> /to <end date>
+____________________________________________________________
+____________________________________________________________
+ Sorry, but the format used is invalid: Missing /from or /to.
+Usage: event <description> /from <start date> /to <end date>
+____________________________________________________________
+____________________________________________________________
+ Sorry, but the format used is invalid: one or more arguments are missing
+Usage: event <description> /from <start date> /to <end date>
+____________________________________________________________
+____________________________________________________________
+ Sorry, but the format used is invalid: Missing /from or /to.
+Usage: event <description> /from <start date> /to <end date>
+____________________________________________________________
+____________________________________________________________
+ Sorry, but the format used is invalid: '/from' must come before '/to'.
+Usage: event <description> /from <start date> /to <end date>
+____________________________________________________________
+____________________________________________________________
+ Bye. Hope to see you again soon!
+____________________________________________________________

@@ -1,10 +1,11 @@
 import java.util.Scanner;
 import java.util.stream.IntStream;
+import java.util.ArrayList;
 
 public class Revel {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Task[] storedTasks = new Task[100];
+        ArrayList<Task> storedTasks = new ArrayList<>();
         int itemCount = 0;
         boolean exitLoop = false;
         String allCommands = "help, list, todo, event, deadline, mark, unmark, exit, bye";
@@ -36,7 +37,7 @@ public class Revel {
                     case "list" -> {
                         System.out.println(indent);
                         System.out.println("Here are the tasks in your list:");
-                        IntStream.range(0, itemCount).mapToObj(i -> (i + 1) + "." + storedTasks[i].toString()).forEach(System.out::println);
+                        IntStream.range(0, itemCount).mapToObj(i -> (i + 1) + "." + storedTasks.get(i).toString()).forEach(System.out::println);
                         System.out.println(indent);
                         continue;
                     }
@@ -46,7 +47,8 @@ public class Revel {
                                     "Usage: todo <description>");
                         }
                         Task selectedTask = new ToDo(argsLine);
-                        storedTasks[itemCount++] = selectedTask;
+                        storedTasks.add(selectedTask);
+                        itemCount++;
                         printTask(selectedTask, itemCount);
                         continue;
                     }
@@ -66,7 +68,8 @@ public class Revel {
                                     "Usage: deadline <description> /by <date/time>");
                         }
                         Task selectedTask = new Deadline(taskDesc, dateTime);
-                        storedTasks[itemCount++] = selectedTask;
+                        storedTasks.add(selectedTask);
+                        itemCount++;
                         printTask(selectedTask, itemCount);
                         continue;
                     }
@@ -95,25 +98,25 @@ public class Revel {
                                     "Usage: event <description> /from <start date> /to <end date>");
                         }
                         Task selectedTask = new Event(taskDesc, startDate, endDate);
-                        storedTasks[itemCount++] = selectedTask;
+                        storedTasks.add(selectedTask);
+                        itemCount++;
                         printTask(selectedTask, itemCount);
                         continue;
                     }
                     case "mark" -> {
-                        int selectedNumber = Integer.parseInt(input.split(" ")[1]);
-                        Task selectedTask = storedTasks[selectedNumber - 1];
-                        selectedTask.markAsDone();
+                        Task selectedTask = markTask(itemCount, input, storedTasks);
                         System.out.println(indent + "\n" + " Nice! I've marked this task as done:\n  "
                                 + selectedTask + "\n" + indent);
                         continue;
                     }
                     case "unmark" -> {
-                        int selectedNumber = Integer.parseInt(input.split(" ")[1]);
-                        Task selectedTask = storedTasks[selectedNumber - 1];
-                        selectedTask.markAsUndone();
+                        Task selectedTask = unmarkTask(itemCount, input, storedTasks);
                         System.out.println(indent + "\n" + " OK, I've marked this task as not done yet:\n  "
                                 + selectedTask + "\n" + indent);
                         continue;
+                    }
+                    case "delete" -> {
+
                     }
                     case "help" -> {
                         System.out.println("Available Commands: " + allCommands);
@@ -133,7 +136,46 @@ public class Revel {
         sc.close();
     }
 
-    public static void printTask(Task task, int itemCount) {
+    private static Task markTask(int itemCount, String input, ArrayList<Task> storedTasks) throws RevelException {
+        if (itemCount == 0) {
+            throw new RevelException("Sorry, but there are no tasks to be marked.\n" +
+                    "Add a task and try again.");
+        }
+
+        if (input.isEmpty()) {
+            throw new RevelException("Sorry, but the task number cannot be empty.\n" +
+                    "Usage: mark <number>");
+        }
+        int selectedNumber = Integer.parseInt(input.split(" ")[1]);
+        if (selectedNumber > itemCount) {
+            throw new RevelException("Sorry, but the number you selected is not in the list.\n" +
+                    "Please try another number.");
+        }
+        Task selectedTask = storedTasks.get(selectedNumber - 1);
+        selectedTask.markAsDone();
+        return selectedTask;
+    }
+
+    private static Task unmarkTask(int itemCount, String input, ArrayList<Task> storedTasks) throws RevelException {
+        if (itemCount == 0) {
+            throw new RevelException("Sorry, but there are no tasks to be unmarked.\n" +
+                    "Add a task and try again.");
+        }
+        if (input.isEmpty()) {
+            throw new RevelException("Sorry, but the task number cannot be empty.\n" +
+                    "Usage: unmark <number>");
+        }
+        int selectedNumber = Integer.parseInt(input.split(" ")[1]);
+        if (selectedNumber > itemCount) {
+            throw new RevelException("Sorry, but the number you selected is not in the list.\n" +
+                    "Please try another number.");
+        }
+        Task selectedTask = storedTasks.get(selectedNumber - 1);
+        selectedTask.markAsUndone();
+        return selectedTask;
+    }
+
+    private static void printTask(Task task, int itemCount) {
         String indent = "____________________________________________________________";
         System.out.println(indent);
         System.out.println("Got it. I've added this task: ");
@@ -142,11 +184,11 @@ public class Revel {
         System.out.println(indent);
     }
 
-    public static String trimSubstringLeft(String str, String delimiter) {
+    private static String trimSubstringLeft(String str, String delimiter) {
         return str.substring(0, str.indexOf(delimiter)).trim();
     }
 
-    public static String trimSubstringRight(String str, String delimiter) {
+    private static String trimSubstringRight(String str, String delimiter) {
         return str.substring(str.indexOf(delimiter) + delimiter.length()).trim();
     }
 

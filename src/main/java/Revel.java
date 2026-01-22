@@ -7,7 +7,6 @@ public class Revel {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         ArrayList<Task> storedTasks = new ArrayList<>();
-        String allCommands = "help, list, todo, event, deadline, mark, unmark, exit, bye";
         String intro = """
                 ____________________________________________________________
                  Hello! I'm Revel
@@ -31,6 +30,9 @@ public class Revel {
 
                 Command cmd = Command.parse(commandStr);
                 switch (cmd) {
+                    case HELLO -> {
+                        System.out.println(intro);
+                    }
                     case BYE -> {
                         System.out.println(indent + "\n Bye. Hope to see you again soon!\n" + indent);
                         exitLoop = true;
@@ -136,7 +138,7 @@ public class Revel {
                     }
 
                     case HELP -> {
-                        System.out.println("Available Commands: " + allCommands);
+                        System.out.println("Available Commands: " + Command.helpText());
                         continue;
                     }
                 }

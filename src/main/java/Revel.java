@@ -1,4 +1,3 @@
-import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class Revel {
@@ -39,14 +38,14 @@ public class Revel {
                     selectedTask = storedTasks[selectedNumber - 1];
                     selectedTask.markAsDone();
                     System.out.println(indent + "\n" + " Nice! I've marked this task as done:\n  "
-                    + selectedTask.toString() + "\n" + indent);
+                    + selectedTask + "\n" + indent);
                     continue;
                 case "unmark":
                     selectedNumber = Integer.parseInt(input.split(" ")[1]);
                     selectedTask = storedTasks[selectedNumber - 1];
                     selectedTask.markAsUndone();
                     System.out.println(indent + "\n" + " OK, I've marked this task as not done yet:\n  "
-                                       + selectedTask.toString() + "\n" + indent);
+                                       + selectedTask + "\n" + indent);
                     continue;
 
                 default:

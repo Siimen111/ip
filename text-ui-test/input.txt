@@ -10,6 +10,7 @@ event project meeting /from Mon 2pm /to 4pm
 mark 2
 list
 unmark 2
+delete 1
 help
 
 test
@@ -21,4 +22,10 @@ event /from
 event /from /to
 event test /to today
 event test /to today /from tomorrow
+delete 0
+delete 999
+mark 0
+mark 999
+unmark 0
+unmark 999
 bye

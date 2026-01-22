@@ -57,6 +57,11 @@ ____________________________________________________________
  OK, I've marked this task as not done yet:
   [D][ ] return book (by: Sunday)
 ____________________________________________________________
+____________________________________________________________
+ Got it. I've removed this task:
+[T][ ] read book
+Now you have 2 tasks in the list.
+____________________________________________________________
 Available Commands: help, list, todo, event, deadline, mark, unmark, exit, bye
 ____________________________________________________________
  Please enter a command. Type help for a list of commands available to you.
@@ -96,6 +101,30 @@ ____________________________________________________________
 ____________________________________________________________
  Sorry, but the format used is invalid: '/from' must come before '/to'.
 Usage: event <description> /from <start date> /to <end date>
+____________________________________________________________
+____________________________________________________________
+ Sorry, but the number you selected is not in the list.
+Please try another number.
+____________________________________________________________
+____________________________________________________________
+ Sorry, but the number you selected is not in the list.
+Please try another number.
+____________________________________________________________
+____________________________________________________________
+ Sorry, but the number you selected is not in the list.
+Please try another number.
+____________________________________________________________
+____________________________________________________________
+ Sorry, but the number you selected is not in the list.
+Please try another number.
+____________________________________________________________
+____________________________________________________________
+ Sorry, but the number you selected is not in the list.
+Please try another number.
+____________________________________________________________
+____________________________________________________________
+ Sorry, but the number you selected is not in the list.
+Please try another number.
 ____________________________________________________________
 ____________________________________________________________
  Bye. Hope to see you again soon!

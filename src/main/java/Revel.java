@@ -32,6 +32,7 @@ public class Revel {
                 switch (cmd) {
                     case HELLO -> {
                         System.out.println(intro);
+                        continue;
                     }
                     case BYE -> {
                         System.out.println(indent + "\n Bye. Hope to see you again soon!\n" + indent);

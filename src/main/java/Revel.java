@@ -6,7 +6,6 @@ public class Revel {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         ArrayList<Task> storedTasks = new ArrayList<>();
-        int itemCount = 0;
         boolean exitLoop = false;
         String allCommands = "help, list, todo, event, deadline, mark, unmark, exit, bye";
         String intro = """
@@ -37,7 +36,7 @@ public class Revel {
                     case "list" -> {
                         System.out.println(indent);
                         System.out.println("Here are the tasks in your list:");
-                        IntStream.range(0, itemCount).mapToObj(i -> (i + 1) + "." + storedTasks.get(i).toString()).forEach(System.out::println);
+                        IntStream.range(0, storedTasks.size()).mapToObj(i -> (i + 1) + "." + storedTasks.get(i).toString()).forEach(System.out::println);
                         System.out.println(indent);
                         continue;
                     }
@@ -48,8 +47,7 @@ public class Revel {
                         }
                         Task selectedTask = new ToDo(argsLine);
                         storedTasks.add(selectedTask);
-                        itemCount++;
-                        printTask(selectedTask, itemCount);
+                        printTask(selectedTask, storedTasks.size());
                         continue;
                     }
                     case "deadline" -> {
@@ -69,8 +67,7 @@ public class Revel {
                         }
                         Task selectedTask = new Deadline(taskDesc, dateTime);
                         storedTasks.add(selectedTask);
-                        itemCount++;
-                        printTask(selectedTask, itemCount);
+                        printTask(selectedTask, storedTasks.size());
                         continue;
                     }
                     case "event" -> {
@@ -99,18 +96,17 @@ public class Revel {
                         }
                         Task selectedTask = new Event(taskDesc, startDate, endDate);
                         storedTasks.add(selectedTask);
-                        itemCount++;
-                        printTask(selectedTask, itemCount);
+                        printTask(selectedTask, storedTasks.size());
                         continue;
                     }
                     case "mark" -> {
-                        Task selectedTask = markTask(itemCount, input, storedTasks);
+                        Task selectedTask = markTask(storedTasks.size(), input, storedTasks);
                         System.out.println(indent + "\n" + " Nice! I've marked this task as done:\n  "
                                 + selectedTask + "\n" + indent);
                         continue;
                     }
                     case "unmark" -> {
-                        Task selectedTask = unmarkTask(itemCount, input, storedTasks);
+                        Task selectedTask = unmarkTask(storedTasks.size(), input, storedTasks);
                         System.out.println(indent + "\n" + " OK, I've marked this task as not done yet:\n  "
                                 + selectedTask + "\n" + indent);
                         continue;

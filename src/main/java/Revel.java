@@ -3,10 +3,10 @@ import java.util.stream.IntStream;
 import java.util.ArrayList;
 
 public class Revel {
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         ArrayList<Task> storedTasks = new ArrayList<>();
-        boolean exitLoop = false;
         String allCommands = "help, list, todo, event, deadline, mark, unmark, exit, bye";
         String intro = """
                 ____________________________________________________________
@@ -17,6 +17,7 @@ public class Revel {
         String indent = "____________________________________________________________";
         System.out.println(intro);
 
+        boolean exitLoop = false;
         while (true) {
             String input = sc.nextLine().trim();
             try {
@@ -100,19 +101,24 @@ public class Revel {
                         continue;
                     }
                     case "mark" -> {
-                        Task selectedTask = markTask(storedTasks.size(), input, storedTasks);
+                        Task selectedTask = markTask(input, storedTasks);
                         System.out.println(indent + "\n" + " Nice! I've marked this task as done:\n  "
                                 + selectedTask + "\n" + indent);
                         continue;
                     }
                     case "unmark" -> {
-                        Task selectedTask = unmarkTask(storedTasks.size(), input, storedTasks);
+                        Task selectedTask = unmarkTask(input, storedTasks);
                         System.out.println(indent + "\n" + " OK, I've marked this task as not done yet:\n  "
                                 + selectedTask + "\n" + indent);
                         continue;
                     }
                     case "delete" -> {
-
+                        Task selectedTask = deleteTask(input, storedTasks);
+                        System.out.println("____________________________________________________________");
+                        System.out.println(" Got it. I've removed this task:");
+                        System.out.println(selectedTask.toString());
+                        System.out.println("Now you have " + storedTasks.size() + " tasks in the list.");
+                        System.out.println("____________________________________________________________");
                     }
                     case "help" -> {
                         System.out.println("Available Commands: " + allCommands);
@@ -132,7 +138,46 @@ public class Revel {
         sc.close();
     }
 
-    private static Task markTask(int itemCount, String input, ArrayList<Task> storedTasks) throws RevelException {
+    private static Task deleteTask(String input, ArrayList<Task> storedTasks) throws RevelException {
+        int itemCount = storedTasks.size();
+        if (itemCount == 0) {
+            throw new RevelException("Sorry, but there are no tasks to be deleted.\n" +
+                    "Add a task and try again.");
+        }
+
+        if (input.isEmpty()) {
+            throw new RevelException("Sorry, but the task number cannot be empty.\n" +
+                    "Usage: delete <number>");
+        }
+
+        int selectedNumber = parseTaskNumber(extractNumber(input), itemCount);
+        Task selectedTask = getTask(input, storedTasks);
+        storedTasks.remove(selectedNumber - 1);
+        return selectedTask;
+
+
+    }
+
+    private static int extractNumber(String input) {
+        return Integer.parseInt(input.split(" ")[1]);
+    }
+
+    private static int parseTaskNumber(int taskNumber, int itemCount) throws RevelException {
+        if (taskNumber > itemCount || taskNumber <= 0) {
+            throw new RevelException("Sorry, but the number you selected is not in the list.\n" +
+                    "Please try another number.");
+        }
+
+        return taskNumber;
+    }
+    private static Task getTask(String input, ArrayList<Task> storedTasks) throws RevelException {
+        int itemCount = storedTasks.size();
+        int selectedNumber = parseTaskNumber(extractNumber(input), itemCount);
+        return storedTasks.get(selectedNumber - 1);
+    }
+
+    private static Task markTask(String input, ArrayList<Task> storedTasks) throws RevelException {
+        int itemCount = storedTasks.size();
         if (itemCount == 0) {
             throw new RevelException("Sorry, but there are no tasks to be marked.\n" +
                     "Add a task and try again.");
@@ -142,17 +187,13 @@ public class Revel {
             throw new RevelException("Sorry, but the task number cannot be empty.\n" +
                     "Usage: mark <number>");
         }
-        int selectedNumber = Integer.parseInt(input.split(" ")[1]);
-        if (selectedNumber > itemCount) {
-            throw new RevelException("Sorry, but the number you selected is not in the list.\n" +
-                    "Please try another number.");
-        }
-        Task selectedTask = storedTasks.get(selectedNumber - 1);
+        Task selectedTask = getTask(input, storedTasks);
         selectedTask.markAsDone();
         return selectedTask;
     }
 
-    private static Task unmarkTask(int itemCount, String input, ArrayList<Task> storedTasks) throws RevelException {
+    private static Task unmarkTask(String input, ArrayList<Task> storedTasks) throws RevelException {
+        int itemCount = storedTasks.size();
         if (itemCount == 0) {
             throw new RevelException("Sorry, but there are no tasks to be unmarked.\n" +
                     "Add a task and try again.");
@@ -161,12 +202,7 @@ public class Revel {
             throw new RevelException("Sorry, but the task number cannot be empty.\n" +
                     "Usage: unmark <number>");
         }
-        int selectedNumber = Integer.parseInt(input.split(" ")[1]);
-        if (selectedNumber > itemCount) {
-            throw new RevelException("Sorry, but the number you selected is not in the list.\n" +
-                    "Please try another number.");
-        }
-        Task selectedTask = storedTasks.get(selectedNumber - 1);
+        Task selectedTask = getTask(input, storedTasks);
         selectedTask.markAsUndone();
         return selectedTask;
     }

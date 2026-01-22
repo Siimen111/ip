@@ -4,6 +4,16 @@ ____________________________________________________________
 ____________________________________________________________
 
 ____________________________________________________________
+ Hello! I'm Revel
+ What can I do for you?
+____________________________________________________________
+
+____________________________________________________________
+ Hello! I'm Revel
+ What can I do for you?
+____________________________________________________________
+
+____________________________________________________________
 Got it. I've added this task: 
 [T][ ] read book
 Now you have 1 tasks in the list.
@@ -62,7 +72,7 @@ ____________________________________________________________
 [T][ ] read book
 Now you have 2 tasks in the list.
 ____________________________________________________________
-Available Commands: help, list, todo, event, deadline, mark, unmark, exit, bye
+Available Commands: hello, hi, bye, exit, list, todo, deadline, event, mark, unmark, delete, help
 ____________________________________________________________
  Please enter a command. Type help for a list of commands available to you.
 ____________________________________________________________

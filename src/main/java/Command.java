@@ -2,6 +2,7 @@ import java.util.stream.Collectors;
 import java.util.Arrays;
 
 public enum Command {
+    HELLO("hello", "hi"),
     BYE("bye", "exit"),
     LIST("list"),
     TODO("todo"),
@@ -34,7 +35,8 @@ public enum Command {
 
     static String helpText() {
         return Arrays.stream(values())
-                .map(c -> c.aliases[0])
+                .flatMap(c -> Arrays.stream(c.aliases))
+                .distinct()
                 .collect(Collectors.joining(", "));
     }
 }

@@ -1,3 +1,6 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public abstract class  Task {
     protected String description;
     protected boolean isDone;
@@ -20,10 +23,13 @@ public abstract class  Task {
             task = new ToDo(desc);
             break;
         case "DL":
-            task = new Deadline(desc, parts[3]);
+            LocalDateTime byDate = LocalDateTime.parse(parts[3], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            task = new Deadline(desc, byDate);
             break;
         case "E":
-            task = new Event(desc, parts[3], parts[4]);
+            LocalDateTime fromDate = LocalDateTime.parse(parts[3], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            LocalDateTime toDate = LocalDateTime.parse(parts[4], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            task = new Event(desc, fromDate, toDate);
             break;
         default:
             throw new IllegalArgumentException("Unknown task type:" + type);

@@ -16,19 +16,42 @@ ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task: 
 [T][ ] read book
-Now you have 9 tasks in the list.
+Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
-1.[D][ ] return book (by: 01/02/2026)
-2.[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-3.[T][ ] read book
-4.[D][ ] return book (by: 01/02/2026)
-5.[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-6.[T][ ] read book
-7.[D][ ] return book (by: 01/02/2026)
-8.[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-9.[T][ ] read book
+1.[T][ ] read book
+____________________________________________________________
+____________________________________________________________
+ Nice! I've marked this task as done:
+  [T][X] read book
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][X] read book
+____________________________________________________________
+____________________________________________________________
+ OK, I've marked this task as not done yet:
+  [T][ ] read book
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] read book
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[D][ ] return book (by: 01/02/2026)
+Now you have 2 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] read book
+2.[D][ ] return book (by: 01/02/2026)
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
+Now you have 3 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
  Nice! I've marked this task as done:
@@ -36,81 +59,18 @@ ____________________________________________________________
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
-1.[D][X] return book (by: 01/02/2026)
-2.[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-3.[T][ ] read book
-4.[D][ ] return book (by: 01/02/2026)
-5.[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-6.[T][ ] read book
-7.[D][ ] return book (by: 01/02/2026)
-8.[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-9.[T][ ] read book
+1.[T][ ] read book
+2.[D][X] return book (by: 01/02/2026)
+3.[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
 ____________________________________________________________
 ____________________________________________________________
  OK, I've marked this task as not done yet:
   [D][ ] return book (by: 01/02/2026)
 ____________________________________________________________
 ____________________________________________________________
-Here are the tasks in your list:
-1.[D][ ] return book (by: 01/02/2026)
-2.[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-3.[T][ ] read book
-4.[D][ ] return book (by: 01/02/2026)
-5.[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-6.[T][ ] read book
-7.[D][ ] return book (by: 01/02/2026)
-8.[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-9.[T][ ] read book
-____________________________________________________________
-____________________________________________________________
-Got it. I've added this task: 
-[D][ ] return book (by: 01/02/2026)
-Now you have 10 tasks in the list.
-____________________________________________________________
-____________________________________________________________
-Here are the tasks in your list:
-1.[D][ ] return book (by: 01/02/2026)
-2.[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-3.[T][ ] read book
-4.[D][ ] return book (by: 01/02/2026)
-5.[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-6.[T][ ] read book
-7.[D][ ] return book (by: 01/02/2026)
-8.[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-9.[T][ ] read book
-10.[D][ ] return book (by: 01/02/2026)
-____________________________________________________________
-____________________________________________________________
-Got it. I've added this task: 
-[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-Now you have 11 tasks in the list.
-____________________________________________________________
-____________________________________________________________
- Nice! I've marked this task as done:
-  [E][X] project meeting (from: 30/01/2026 to: 28/02/2026)
-____________________________________________________________
-____________________________________________________________
-Here are the tasks in your list:
-1.[D][ ] return book (by: 01/02/2026)
-2.[E][X] project meeting (from: 30/01/2026 to: 28/02/2026)
-3.[T][ ] read book
-4.[D][ ] return book (by: 01/02/2026)
-5.[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-6.[T][ ] read book
-7.[D][ ] return book (by: 01/02/2026)
-8.[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-9.[T][ ] read book
-10.[D][ ] return book (by: 01/02/2026)
-11.[E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-____________________________________________________________
-____________________________________________________________
- OK, I've marked this task as not done yet:
-  [E][ ] project meeting (from: 30/01/2026 to: 28/02/2026)
-____________________________________________________________
-____________________________________________________________
  Got it. I've removed this task:
-[D][ ] return book (by: 01/02/2026)
-Now you have 10 tasks in the list.
+[T][ ] read book
+Now you have 2 tasks in the list.
 ____________________________________________________________
 Available Commands: hello, hi, bye, exit, list, todo, deadline, event, mark, unmark, delete, help
 ____________________________________________________________

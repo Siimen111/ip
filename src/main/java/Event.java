@@ -21,8 +21,8 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + Revel.formatForUser(this.fromDate)
-                + " to: " + Revel.formatForUser(this.toDate) + ")";
+        return "[E]" + super.toString() + " (from: " + Parser.formatForUser(this.fromDate)
+                + " to: " + Parser.formatForUser(this.toDate) + ")";
     }
 
     @Override

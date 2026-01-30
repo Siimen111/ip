@@ -35,31 +35,21 @@ public class Storage {
         }
     }
 
-    public void save(List<Task> tasks) throws IOException {
-        Files.createDirectories(filePath.getParent());
-        List<String> lines = new ArrayList<>();
+    public void save(TaskList tasks) throws RevelException {
+        try {
+            Files.createDirectories(filePath.getParent());
+            List<String> lines = new ArrayList<>();
 
-        for (Task t : tasks) {
-            lines.add(t.toFileString());
+            for (Task t : tasks.getTaskList()) {
+                lines.add(t.toFileString());
+            }
+
+            Files.write(filePath, lines, StandardCharsets.UTF_8,
+                    StandardOpenOption.CREATE,
+                    StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            throw new RevelException("Unable to save tasks to disk.");
         }
-
-        Files.write(filePath, lines, StandardCharsets.UTF_8,
-                StandardOpenOption.CREATE,
-                StandardOpenOption.TRUNCATE_EXISTING);
     }
-
-
-    // TODO: Remember to set to private/comment out after testing
-    /*
-    public void clearForTesting() throws IOException {
-        Files.createDirectories(filePath.getParent());
-        Files.write(filePath,
-                Collections.emptyList(),
-                StandardCharsets.UTF_8,
-                StandardOpenOption.CREATE,
-                StandardOpenOption.TRUNCATE_EXISTING);
-    }
-
-     */
 
 }

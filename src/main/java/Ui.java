@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.stream.IntStream;
 
@@ -41,10 +40,10 @@ public class Ui {
         System.out.println("Available Commands: " + helpText);
     }
 
-    public void showTaskList(ArrayList<Task> tasks) {
+    public void showTaskList(TaskList tasks) {
         System.out.println(LINE);
         System.out.println("Here are the tasks in your list:");
-        IntStream.range(0, tasks.size()).mapToObj(i -> (i + 1) + "." + tasks.get(i).toString()).forEach(System.out::println);
+        IntStream.range(0, tasks.getSize()).mapToObj(i -> (i + 1) + "." + tasks.get(i).toString()).forEach(System.out::println);
         System.out.println(LINE);
     }
 

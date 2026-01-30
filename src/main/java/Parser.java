@@ -4,6 +4,16 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class Parser {
+    // DateTime Constants
+    private static final DateTimeFormatter IN_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter IN_YMD_HHMM = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+    private static final DateTimeFormatter IN_YMD_HH_COLON_MM = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter IN_DMY_HHMM = DateTimeFormatter.ofPattern("d/M/yyyy HHmm"); // example: 2/12/2019 1800
+
+    // For printing
+    private static final DateTimeFormatter OUT_DATE = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter OUT_DATE_TIME = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
     // Record classes for storing parsed task commands
     public record ParsedInput(Command command, String argsLine) {}
     public record DeadlineArgs(String description, LocalDateTime byDate) {}
@@ -103,14 +113,23 @@ public class Parser {
         return new EventArgs(taskDesc, fromDate, toDate);
     }
 
-    private static final DateTimeFormatter IN_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private static final DateTimeFormatter IN_YMD_HHMM = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-    private static final DateTimeFormatter IN_YMD_HH_COLON_MM = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    private static final DateTimeFormatter IN_DMY_HHMM = DateTimeFormatter.ofPattern("d/M/yyyy HHmm"); // example: 2/12/2019 1800
+    public static int parseNumber(String argsLine) throws RevelException {
+        try {
+            return Integer.parseInt(argsLine.trim());
+        } catch (NumberFormatException e) {
+            throw new RevelException("Sorry, but the task number must be an integer.");
+        }
+    }
 
-    // For printing
-    private static final DateTimeFormatter OUT_DATE = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final DateTimeFormatter OUT_DATE_TIME = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    public static int parseTaskNumber(int taskNumber, int itemCount) throws RevelException {
+        if (taskNumber > itemCount || taskNumber <= 0) {
+            throw new RevelException("Sorry, but the number you selected is not in the list.\n" +
+                    "Please try another number.");
+        }
+        return taskNumber;
+    }
+
+
 
     private static LocalDateTime parseToLocalDateTime(String raw) throws RevelException {
         String s = raw.trim();

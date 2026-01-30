@@ -2,6 +2,11 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.stream.IntStream;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 
 public class Revel {
 
@@ -85,7 +90,8 @@ public class Revel {
                                     "Usage: deadline <description> /by <date/time>");
                         }
 
-                        Task selectedTask = new Deadline(taskDesc, dateTime);
+                        LocalDateTime byDate = parseToLocalDateTime(dateTime);
+                        Task selectedTask = new Deadline(taskDesc, byDate);
                         storedTasks.add(selectedTask);
                         printTask(selectedTask, storedTasks.size());
                         saveSafely(storage, storedTasks);
@@ -119,7 +125,9 @@ public class Revel {
                                     "Usage: event <description> /from <start date> /to <end date>");
                         }
 
-                        Task selectedTask = new Event(taskDesc, startDate, endDate);
+                        LocalDateTime toDate = parseToLocalDateTime(startDate);
+                        LocalDateTime fromDate = parseToLocalDateTime(endDate);
+                        Task selectedTask = new Event(taskDesc, toDate, fromDate);
                         storedTasks.add(selectedTask);
                         printTask(selectedTask, storedTasks.size());
                         saveSafely(storage, storedTasks);
@@ -274,5 +282,47 @@ public class Revel {
             System.out.println(indent);
         }
     }
+
+    private static final DateTimeFormatter IN_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter IN_YMD_HHMM = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+    private static final DateTimeFormatter IN_YMD_HH_COLON_MM = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter IN_DMY_HHMM = DateTimeFormatter.ofPattern("d/M/yyyy HHmm"); // example: 2/12/2019 1800
+
+    // For printing
+    private static final DateTimeFormatter OUT_DATE = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter OUT_DATE_TIME = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+    private static LocalDateTime parseToLocalDateTime(String raw) throws RevelException {
+        String s = raw.trim();
+
+        // Try date-time formats first
+        try { return LocalDateTime.parse(s, IN_YMD_HHMM); } catch (DateTimeParseException ignored) {}
+        try { return LocalDateTime.parse(s, IN_YMD_HH_COLON_MM); } catch (DateTimeParseException ignored) {}
+        try { return LocalDateTime.parse(s, IN_DMY_HHMM); } catch (DateTimeParseException ignored) {}
+
+        // Then try date-only
+        try {
+            LocalDate d = LocalDate.parse(s, IN_DATE);
+            return d.atStartOfDay(); // default time 00:00 if none given
+        } catch (DateTimeParseException ignored) {}
+
+        throw new RevelException(
+                """
+                        Sorry, but your date/time is invalid.
+                        Accepted formats:
+                          yyyy-MM-dd
+                          yyyy-MM-dd HHmm (e.g., 2019-12-02 1800)
+                          d/M/yyyy HHmm (e.g., 2/12/2019 1800)"""
+        );
+    }
+
+    public static String formatForUser(LocalDateTime dt) {
+        // If you want date-only display when time is 00:00:
+        if (dt.getHour() == 0 && dt.getMinute() == 0) {
+            return dt.format(OUT_DATE);
+        }
+        return dt.format(OUT_DATE_TIME);
+    }
+
 
 }

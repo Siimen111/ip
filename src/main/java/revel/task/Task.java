@@ -1,8 +1,12 @@
+package revel.task;
+
+import revel.ToDo;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public abstract class Task {
-    protected String description;
+    protected final String description;
     protected boolean isDone;
 
     public Task(String description) {

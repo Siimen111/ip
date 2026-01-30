@@ -90,4 +90,30 @@ public class TaskList {
         return selectedTask;
     }
 
+    /**
+     * Returns tasks whose string representation contains the given keyword (case-insensitive).
+     *
+     * @param keyword The search keyword.
+     * @return A list of matching tasks (may be empty).
+     * @throws RevelException If the keyword is empty.
+     */
+    public TaskList findTasks(String keyword) throws RevelException {
+        String k = keyword.trim();
+        if (k.isEmpty()) {
+            throw new RevelException("Sorry, but the keyword to find cannot be empty.\n"
+            + "Usage: find <keyword>");
+        }
+
+        String key = k.toLowerCase();
+        List<Task> matches = new ArrayList<>();
+
+        for (Task t : storedTasks) {
+            String lock = t.getDescription().toLowerCase();
+            if (lock.contains(key)) {
+                matches.add(t);
+            }
+        }
+        return new TaskList(matches);
+    }
+
 }

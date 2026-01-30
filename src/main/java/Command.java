@@ -1,32 +1,8 @@
-import java.util.stream.Collectors;
-import java.util.Arrays;
+public abstract class Command {
 
-public enum Command {
-    HELLO("hello", "hi"),
-    BYE("bye", "exit"),
-    LIST("list"),
-    TODO("todo"),
-    DEADLINE("deadline"),
-    EVENT("event"),
-    MARK("mark"),
-    UNMARK("unmark"),
-    DELETE("delete"),
-    HELP("help");
+    public abstract void execute(TaskList tasks, Ui ui, Storage storage) throws RevelException;
 
-    private final String[] aliases;
-
-    Command(String... aliases) {
-        this.aliases = aliases;
-    }
-
-    String[] getAliases() {
-        return this.aliases;
-    }
-
-    static String helpText() {
-        return Arrays.stream(values())
-                .flatMap(c -> Arrays.stream(c.aliases))
-                .distinct()
-                .collect(Collectors.joining(", "));
+    public boolean isExit() {
+        return false;
     }
 }

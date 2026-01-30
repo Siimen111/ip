@@ -1,3 +1,11 @@
+package revel.command;
+
+import revel.RevelException;
+import revel.storage.Storage;
+import revel.task.Task;
+import revel.task.TaskList;
+import revel.ui.Ui;
+
 public class DeleteCommand extends Command {
     private final String argsLine;
 

@@ -1,3 +1,10 @@
+package revel;
+
+import revel.command.Command;
+import revel.storage.Storage;
+import revel.task.TaskList;
+import revel.ui.Ui;
+
 public class Revel {
 
     private final Ui ui;

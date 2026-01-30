@@ -1,8 +1,12 @@
+package revel.task;
+
+import revel.Parser;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Deadline extends Task {
-    protected LocalDateTime byDate;
+    protected final LocalDateTime byDate;
     public Deadline(String description, LocalDateTime byDate) {
         super(description);
         this.byDate = byDate;

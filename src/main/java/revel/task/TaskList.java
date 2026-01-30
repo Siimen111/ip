@@ -1,8 +1,13 @@
+package revel.task;
+
+import revel.Parser;
+import revel.RevelException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class TaskList {
-    ArrayList<Task> storedTasks;
+    final ArrayList<Task> storedTasks;
 
     public TaskList() {
         this.storedTasks = new ArrayList<>();

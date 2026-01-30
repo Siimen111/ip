@@ -1,3 +1,9 @@
+package revel.ui;
+
+import revel.Parser;
+import revel.task.Task;
+import revel.task.TaskList;
+
 import java.util.Scanner;
 import java.util.stream.IntStream;
 
@@ -5,7 +11,7 @@ public class Ui {
     private static final String LINE = "____________________________________________________________";
     private static final String INTRO_LINE = " Hello! I'm Revel\n"
                   + " What can I do for you?";
-    Scanner sc;
+    final Scanner sc;
 
     public Ui() {
         sc = new Scanner(System.in);

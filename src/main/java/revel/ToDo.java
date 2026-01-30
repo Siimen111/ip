@@ -1,3 +1,7 @@
+package revel;
+
+import revel.task.Task;
+
 public class ToDo extends Task {
     public ToDo(String description) {
         super(description);

@@ -16,7 +16,7 @@ public class EventCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws RevelException {
+    public void execute(TaskList tasks, Ui ui, Storage storage) {
         Task selectedTask = new Event(this.eventArgs.description(),
                 this.eventArgs.fromDate(), this.eventArgs.toDate());
         tasks.addTask(selectedTask);

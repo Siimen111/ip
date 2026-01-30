@@ -16,7 +16,7 @@ public class DeadlineCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws RevelException {
+    public void execute(TaskList tasks, Ui ui, Storage storage) {
         Task selectedTask = new Deadline(this.deadlineArgs.description(),
                 this.deadlineArgs.byDate());
         tasks.addTask(selectedTask);

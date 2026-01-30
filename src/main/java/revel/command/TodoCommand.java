@@ -15,7 +15,7 @@ public class TodoCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws RevelException {
+    public void execute(TaskList tasks, Ui ui, Storage storage) {
         Task selectedTask = new ToDo(this.description);
         tasks.addTask(selectedTask);
         ui.showTaskAdded(selectedTask, tasks.getSize());

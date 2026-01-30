@@ -17,6 +17,10 @@ public class MarkCommand extends Command {
     public void execute(TaskList tasks, Ui ui, Storage storage) throws RevelException {
         Task selectedTask = tasks.markTask(this.argsLine);
         ui.showTaskMarked(selectedTask);
-        storage.save(tasks);
+        try {
+            storage.save(tasks);
+        } catch (RevelException e) {
+            ui.showSaveWarning(e.getMessage());
+        }
     }
 }

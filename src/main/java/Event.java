@@ -11,18 +11,10 @@ public class Event extends Task {
         this.toDate = toDate;
     }
 
-    public LocalDateTime getFromDate() {
-        return this.fromDate;
-    }
-
-    public LocalDateTime getToDate() {
-        return this.toDate;
-    }
-
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + Revel.formatForUser(this.fromDate)
-                + " to: " + Revel.formatForUser(this.toDate) + ")";
+        return "[E]" + super.toString() + " (from: " + Parser.formatForUser(this.fromDate)
+                + " to: " + Parser.formatForUser(this.toDate) + ")";
     }
 
     @Override

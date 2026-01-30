@@ -8,13 +8,9 @@ public class Deadline extends Task {
         this.byDate = byDate;
     }
 
-    public LocalDateTime getByDate() {
-        return this.byDate;
-    }
-
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + Revel.formatForUser(this.byDate) + ")";
+        return "[D]" + super.toString() + " (by: " + Parser.formatForUser(this.byDate) + ")";
     }
 
     @Override

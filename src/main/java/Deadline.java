@@ -14,7 +14,7 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + Revel.formatForUser(this.byDate) + ")";
+        return "[D]" + super.toString() + " (by: " + Parser.formatForUser(this.byDate) + ")";
     }
 
     @Override

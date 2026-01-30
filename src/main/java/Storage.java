@@ -7,6 +7,7 @@ import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -46,5 +47,17 @@ public class Storage {
                 StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING);
     }
+
+    /*
+    TODO: Remember to set to private/comment out after testing
+    public void clearForTesting() throws IOException {
+        Files.createDirectories(filePath.getParent());
+        Files.write(filePath,
+                Collections.emptyList(),
+                StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING);
+    }
+     */
 
 }

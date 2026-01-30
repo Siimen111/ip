@@ -1,9 +1,5 @@
 import java.io.IOException;
 import java.util.ArrayList;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 
 public class Revel {
@@ -31,15 +27,11 @@ public class Revel {
         while (true) {
             String input = ui.readCommand();
             try {
-                if (input.isEmpty()) {
-                    throw new RevelException(("Please enter a command. Type help for a list of commands available to you."));
-                }
 
-                String[] parts = input.split("\\s+", 2);
-                String commandStr = parts[0];
-                String argsLine = (parts.length == 2) ? parts[1].trim() : "";
+                Parser.ParsedInput parsed = Parser.parseInput(input);
+                Command cmd = parsed.command();
+                String argsLine = parsed.argsLine();
 
-                Command cmd = Command.parse(commandStr);
                 switch (cmd) {
                     case HELLO -> {
                         ui.showIntro();
@@ -57,12 +49,8 @@ public class Revel {
                     }
 
                     case TODO -> {
-                        if (argsLine.isEmpty()) {
-                            throw new RevelException("Sorry, but the description of todo cannot be empty.\n" +
-                                    "Usage: todo <description>");
-                        }
-
-                        Task selectedTask = new ToDo(argsLine);
+                        String description = Parser.parseTodo(argsLine);
+                        Task selectedTask = new ToDo(description);
                         storedTasks.add(selectedTask);
                         ui.showTaskAdded(selectedTask, storedTasks.size());
                         saveSafely(storage, storedTasks, ui);
@@ -70,26 +58,8 @@ public class Revel {
                     }
 
                     case DEADLINE -> {
-                        if (argsLine.isEmpty()) {
-                            throw new RevelException("Sorry, but the description of deadline cannot be empty.\n" +
-                                    "Usage: deadline <description> /by <date/time>");
-                        }
-
-                        if (!argsLine.contains("/by")) {
-                            throw new RevelException("Missing /by.\n" +
-                                    "Usage: deadline <description> /by <date/time>");
-                        }
-
-                        String taskDesc = trimSubstringLeft(argsLine, "/by");
-                        String dateTime = trimSubstringRight(argsLine, "/by");
-
-                        if (taskDesc.isEmpty() || dateTime.isEmpty()) {
-                            throw new RevelException("Sorry, but the format used is invalid.\n" +
-                                    "Usage: deadline <description> /by <date/time>");
-                        }
-                        LocalDateTime byDate = parseToLocalDateTime(dateTime);
-
-                        Task selectedTask = new Deadline(taskDesc, byDate);
+                        Parser.DeadlineArgs d = Parser.parseDeadline(argsLine);
+                        Task selectedTask = new Deadline(d.description(), d.byDate());
                         storedTasks.add(selectedTask);
                         ui.showTaskAdded(selectedTask, storedTasks.size());
                         saveSafely(storage, storedTasks, ui);
@@ -97,35 +67,8 @@ public class Revel {
                     }
 
                     case EVENT -> {
-                        if (argsLine.isEmpty()) {
-                            throw new RevelException("Sorry, but the description of event cannot be empty.\n" +
-                                    "Usage: event <description> /from <start date> /to <end date>");
-                        }
-
-                        if (!argsLine.contains("/from") || !argsLine.contains("/to")) {
-                            throw new RevelException("Sorry, but the format used is invalid: Missing /from or /to.\n" +
-                                    "Usage: event <description> /from <start date> /to <end date>");
-                        }
-
-                        int fromPos = argsLine.indexOf("/from");
-                        int toPos = argsLine.indexOf("/to");
-
-                        if (toPos < fromPos) {
-                            throw new RevelException("Sorry, but the format used is invalid: '/from' must come before '/to'.\n" +
-                                    "Usage: event <description> /from <start date> /to <end date>");
-                        }
-
-                        String taskDesc = trimSubstringLeft(argsLine, "/from");
-                        String startDate = trimSubstring(argsLine, "/from", "/to");
-                        String endDate = trimSubstringRight(argsLine, "/to");
-                        if (taskDesc.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
-                            throw new RevelException("Sorry, but the format used is invalid: one or more arguments are missing\n" +
-                                    "Usage: event <description> /from <start date> /to <end date>");
-                        }
-
-                        LocalDateTime toDate = parseToLocalDateTime(startDate);
-                        LocalDateTime fromDate = parseToLocalDateTime(endDate);
-                        Task selectedTask = new Event(taskDesc, toDate, fromDate);
+                        Parser.EventArgs e = Parser.parseEvent(argsLine);
+                        Task selectedTask = new Event(e.description(), e.fromDate(), e.toDate());
                         storedTasks.add(selectedTask);
                         ui.showTaskAdded(selectedTask, storedTasks.size());
                         saveSafely(storage, storedTasks, ui);
@@ -245,19 +188,6 @@ public class Revel {
         return selectedTask;
     }
 
-    private static String trimSubstringLeft(String str, String delimiter) {
-        return str.substring(0, str.indexOf(delimiter)).trim();
-    }
-
-    private static String trimSubstringRight(String str, String delimiter) {
-        return str.substring(str.indexOf(delimiter) + delimiter.length()).trim();
-    }
-
-    public static String trimSubstring(String str, String startDelimiter, String endDelimiter) {
-        int start = str.indexOf(startDelimiter) + startDelimiter.length();
-        int end = str.indexOf(endDelimiter, start);
-        return str.substring(start, end).trim();
-    }
 
     private static void saveSafely(Storage storage, ArrayList<Task> storedTasks, Ui ui) {
         try {
@@ -265,47 +195,6 @@ public class Revel {
         } catch (IOException e) {
             ui.showSaveWarning(e.getMessage());
         }
-    }
-
-    private static final DateTimeFormatter IN_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private static final DateTimeFormatter IN_YMD_HHMM = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-    private static final DateTimeFormatter IN_YMD_HH_COLON_MM = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    private static final DateTimeFormatter IN_DMY_HHMM = DateTimeFormatter.ofPattern("d/M/yyyy HHmm"); // example: 2/12/2019 1800
-
-    // For printing
-    private static final DateTimeFormatter OUT_DATE = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final DateTimeFormatter OUT_DATE_TIME = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-    private static LocalDateTime parseToLocalDateTime(String raw) throws RevelException {
-        String s = raw.trim();
-
-        // Try date-time formats first
-        try { return LocalDateTime.parse(s, IN_YMD_HHMM); } catch (DateTimeParseException ignored) {}
-        try { return LocalDateTime.parse(s, IN_YMD_HH_COLON_MM); } catch (DateTimeParseException ignored) {}
-        try { return LocalDateTime.parse(s, IN_DMY_HHMM); } catch (DateTimeParseException ignored) {}
-
-        // Then try date-only
-        try {
-            LocalDate d = LocalDate.parse(s, IN_DATE);
-            return d.atStartOfDay(); // default time 00:00 if none given
-        } catch (DateTimeParseException ignored) {}
-
-        throw new RevelException(
-                """
-                        Sorry, but your date/time is invalid.
-                        Accepted formats:
-                          yyyy-MM-dd
-                          yyyy-MM-dd HHmm (e.g., 2019-12-02 1800)
-                          d/M/yyyy HHmm (e.g., 2/12/2019 1800)"""
-        );
-    }
-
-    public static String formatForUser(LocalDateTime dt) {
-        // If you want date-only display when time is 00:00:
-        if (dt.getHour() == 0 && dt.getMinute() == 0) {
-            return dt.format(OUT_DATE);
-        }
-        return dt.format(OUT_DATE_TIME);
     }
 
 

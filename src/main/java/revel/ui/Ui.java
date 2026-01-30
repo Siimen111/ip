@@ -46,6 +46,11 @@ public class Ui {
         System.out.println(" Available Commands: " + Parser.helpText());
     }
 
+    public void showFoundTaskList(TaskList tasks) {
+        System.out.println(" Here are the matching tasks in your list:");
+        IntStream.range(0, tasks.getSize()).mapToObj(i -> (i + 1) + "." + tasks.get(i).toString()).forEach(System.out::println);
+    }
+
     public void showTaskList(TaskList tasks) {
         System.out.println(" Here are the tasks in your list:");
         IntStream.range(0, tasks.getSize())

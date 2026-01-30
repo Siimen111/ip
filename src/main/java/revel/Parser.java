@@ -14,6 +14,7 @@ import revel.command.CommandWord;
 import revel.command.DeadlineCommand;
 import revel.command.DeleteCommand;
 import revel.command.EventCommand;
+import revel.command.FindCommand;
 import revel.command.HelloCommand;
 import revel.command.HelpCommand;
 import revel.command.ListCommand;
@@ -52,6 +53,7 @@ public class Parser {
         register(CommandWord.UNMARK, "unmark");
         register(CommandWord.DELETE, "delete");
         register(CommandWord.HELP, "help");
+        register(CommandWord.FIND, "find");
     }
 
     private static void register(CommandWord word, String... aliases) {
@@ -124,6 +126,11 @@ public class Parser {
 
         case HELP -> {
             return new HelpCommand();
+            }
+
+        case FIND -> {
+            return new FindCommand(argsLine);
+        }
         }
         default -> throw new RevelException(" Sorry! I am unable to assist you with that.\n"
                 + "Type 'help' for a list of commands available to you.");

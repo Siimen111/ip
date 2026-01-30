@@ -32,6 +32,11 @@ public class Ui {
         System.out.println(LINE + "\n " + message + "\n " + LINE);
     }
 
+    public void showLoadingError() {
+        System.out.println(LINE + "Loading error occurred! Task List not found!\n"
+                + "Creating new empty task list...\n" + LINE);
+    }
+
     public void showHelp(String helpText) {
         System.out.println("Available Commands: " + helpText);
     }

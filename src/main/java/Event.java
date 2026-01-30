@@ -11,14 +11,6 @@ public class Event extends Task {
         this.toDate = toDate;
     }
 
-    public LocalDateTime getFromDate() {
-        return this.fromDate;
-    }
-
-    public LocalDateTime getToDate() {
-        return this.toDate;
-    }
-
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: " + Parser.formatForUser(this.fromDate)

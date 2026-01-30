@@ -38,6 +38,7 @@ application {
 
 shadowJar {
     archiveBaseName = "revel"
+    archiveFileName = 'revel.jar'
     archiveClassifier = null
 }
 

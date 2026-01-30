@@ -19,6 +19,10 @@ public class TodoCommand extends Command {
         Task selectedTask = new ToDo(this.description);
         tasks.addTask(selectedTask);
         ui.showTaskAdded(selectedTask, tasks.getSize());
-        storage.save(tasks);
+        try {
+            storage.save(tasks);
+        } catch (RevelException e) {
+            ui.showSaveWarning(e.getMessage());
+        }
     }
 }

@@ -21,6 +21,10 @@ public class EventCommand extends Command {
                 this.eventArgs.fromDate(), this.eventArgs.toDate());
         tasks.addTask(selectedTask);
         ui.showTaskAdded(selectedTask, tasks.getSize());
-        storage.save(tasks);
+        try {
+            storage.save(tasks);
+        } catch (RevelException e) {
+            ui.showSaveWarning(e.getMessage());
+        }
     }
 }

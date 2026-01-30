@@ -7,8 +7,14 @@ public class Event extends Task {
         this.toDate = toDate;
     }
 
+
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: " + this.fromDate + " to: " + this.toDate + ")";
+    }
+
+    @Override
+    public String toFileString() {
+        return "E | " + (isDone ? 1 : 0) + " | " + description + " | " + fromDate + " | " + toDate;
     }
 }

@@ -19,6 +19,7 @@ public class Deadline extends Task {
 
     @Override
     public String toFileString() {
-        return "DL | " + (isDone ? 1 : 0) + " | " + description + " | " + byDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        return "DL | " + (isDone ? 1 : 0) + " | " + description + " | "
+                + byDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 }

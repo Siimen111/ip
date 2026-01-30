@@ -30,7 +30,7 @@ public class Ui {
     }
 
     public void showBye() {
-        System.out.println( " Bye. Hope to see you again soon!");
+        System.out.println(" Bye. Hope to see you again soon!");
     }
 
     public void showError(String message) {
@@ -48,7 +48,9 @@ public class Ui {
 
     public void showTaskList(TaskList tasks) {
         System.out.println(" Here are the tasks in your list:");
-        IntStream.range(0, tasks.getSize()).mapToObj(i -> (i + 1) + "." + tasks.get(i).toString()).forEach(System.out::println);
+        IntStream.range(0, tasks.getSize())
+                .mapToObj(i -> (i + 1) + "." + tasks.get(i).toString())
+                .forEach(System.out::println);
     }
 
     public void showTaskAdded(Task task, int itemCount) {

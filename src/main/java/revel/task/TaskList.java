@@ -43,13 +43,13 @@ public class TaskList {
     public Task markTask(String argsLine) throws RevelException {
         int itemCount = this.storedTasks.size();
         if (itemCount == 0) {
-            throw new RevelException("Sorry, but there are no tasks to be marked.\n" +
-                    "Add a task and try again.");
+            throw new RevelException("Sorry, but there are no tasks to be marked.\n"
+                    + "Add a task and try again.");
         }
 
         if (argsLine.isEmpty()) {
-            throw new RevelException("Sorry, but the task number cannot be empty.\n" +
-                    "Usage: mark <number>");
+            throw new RevelException("Sorry, but the task number cannot be empty.\n"
+                    + "Usage: mark <number>");
         }
         Task selectedTask = getTask(argsLine);
         selectedTask.markAsDone();
@@ -59,13 +59,13 @@ public class TaskList {
     public Task unmarkTask(String argsLine) throws RevelException {
         int itemCount = this.storedTasks.size();
         if (itemCount == 0) {
-            throw new RevelException("Sorry, but there are no tasks to be unmarked.\n" +
-                    "Add a task and try again.");
+            throw new RevelException("Sorry, but there are no tasks to be unmarked.\n"
+                    + "Add a task and try again.");
         }
 
         if (argsLine.isEmpty()) {
-            throw new RevelException("Sorry, but the task number cannot be empty.\n" +
-                    "Usage: unmark <number>");
+            throw new RevelException("Sorry, but the task number cannot be empty.\n"
+                    + "Usage: unmark <number>");
         }
         Task selectedTask = getTask(argsLine);
         selectedTask.markAsUndone();
@@ -75,13 +75,13 @@ public class TaskList {
     public Task deleteTask(String argsLine) throws RevelException {
         int itemCount = this.storedTasks.size();
         if (itemCount == 0) {
-            throw new RevelException("Sorry, but there are no tasks to be deleted.\n" +
-                    "Add a task and try again.");
+            throw new RevelException("Sorry, but there are no tasks to be deleted.\n"
+                    + "Add a task and try again.");
         }
 
         if (argsLine.isEmpty()) {
-            throw new RevelException("Sorry, but the task number cannot be empty.\n" +
-                    "Usage: delete <number>");
+            throw new RevelException("Sorry, but the task number cannot be empty.\n"
+                    + "Usage: delete <number>");
         }
 
         int selectedNumber = Parser.parseTaskNumber(Parser.parseNumber(argsLine), itemCount);

@@ -1,11 +1,11 @@
 package revel.ui;
 
+import java.util.Scanner;
+import java.util.stream.IntStream;
+
 import revel.Parser;
 import revel.task.Task;
 import revel.task.TaskList;
-
-import java.util.Scanner;
-import java.util.stream.IntStream;
 
 public class Ui {
     private static final String LINE = "____________________________________________________________";

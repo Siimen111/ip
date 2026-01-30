@@ -1,9 +1,9 @@
 package revel.task;
 
-import revel.ToDo;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import revel.ToDo;
 
 public abstract class Task {
     protected final String description;

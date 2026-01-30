@@ -4,6 +4,9 @@ import revel.storage.Storage;
 import revel.task.TaskList;
 import revel.ui.Ui;
 
+/**
+ * Prints a goodbye statement and exits the program.
+ */
 public class ByeCommand extends Command {
 
     @Override

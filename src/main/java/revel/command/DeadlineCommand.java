@@ -8,6 +8,14 @@ import revel.task.Task;
 import revel.task.TaskList;
 import revel.ui.Ui;
 
+/**
+ * Adds a {@link Deadline} task to the task list.
+ * <p>
+ * The deadline details (description and due date/time) are provided via {@link Parser.DeadlineArgs}.
+ * After adding the task, this command attempts to persist the updated task list using {@link Storage}.
+ * If saving fails, a warning is shown to the user.
+ * </p>
+ */
 public class DeadlineCommand extends Command {
     private final Parser.DeadlineArgs deadlineArgs;
 

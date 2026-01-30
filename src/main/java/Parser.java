@@ -9,6 +9,22 @@ public class Parser {
     public record DeadlineArgs(String description, LocalDateTime byDate) {}
     public record EventArgs(String description, LocalDateTime toDate, LocalDateTime fromDate) {}
 
+    static Command parseCommand(String token) throws RevelException {
+        String t = token.toLowerCase();
+
+        for (Command c : Command.values()) {
+            for (String a : c.getAliases()) {
+                if (a.equals(t)) {
+                    return c;
+                }
+            }
+        }
+
+        throw new RevelException("Sorry! I am unable to assist you with that.\n" +
+                "Type 'help' for a list of commands available to you.");
+    }
+
+
     public static ParsedInput parseInput(String input) throws RevelException {
         String trimmedInput = input.trim();
         if (trimmedInput.isEmpty()) {
@@ -19,7 +35,7 @@ public class Parser {
         String commandStr = parts[0];
         String argsLine = (parts.length == 2) ? parts[1].trim() : "";
 
-        Command cmd = Command.parse(commandStr);
+        Command cmd = parseCommand(commandStr);
         return new ParsedInput(cmd, argsLine);
     }
 

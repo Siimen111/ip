@@ -19,18 +19,8 @@ public enum Command {
         this.aliases = aliases;
     }
 
-    static Command parse(String token) throws RevelException {
-        String t = token.toLowerCase();
-        for (Command c : values()) {
-            for (String a : c.aliases) {
-                if (a.equals(t)) {
-                    return c;
-                }
-            }
-        }
-
-        throw new RevelException("Sorry! I am unable to assist you with that.\n" +
-                "Type 'help' for a list of commands available to you.");
+    String[] getAliases() {
+        return this.aliases;
     }
 
     static String helpText() {

@@ -45,7 +45,7 @@ public class Ui {
 
     public void showTaskAdded(Task task, int itemCount) {
         System.out.println(LINE);
-        System.out.println("Got it. I've added this task: ");
+        System.out.println("Got it. I've added this task:");
         System.out.println(task);
         System.out.println("Now you have " + itemCount + " tasks in the list.");
         System.out.println(LINE);

@@ -48,8 +48,9 @@ public class Storage {
                 StandardOpenOption.TRUNCATE_EXISTING);
     }
 
+
+    // TODO: Remember to set to private/comment out after testing
     /*
-    TODO: Remember to set to private/comment out after testing
     public void clearForTesting() throws IOException {
         Files.createDirectories(filePath.getParent());
         Files.write(filePath,
@@ -58,6 +59,7 @@ public class Storage {
                 StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING);
     }
+
      */
 
 }

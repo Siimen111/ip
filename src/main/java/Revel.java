@@ -14,6 +14,7 @@ public class Revel {
         storedTasks = new ArrayList<>();
 
         try {
+            // storage.clearForTesting(); // TODO: Remove after testing
             storedTasks.addAll(storage.load()); // <-- actually populate your in-memory list
         } catch (IOException e) {
             // file missing / can't read: start empty

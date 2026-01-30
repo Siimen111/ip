@@ -6,9 +6,9 @@ mark 1
 list
 unmark 1
 list
-deadline return book /by Sunday
+deadline return book /by 2026-02-01
 list
-event project meeting /from Mon 2pm /to 4pm
+event project meeting /from 2026-01-30 /to 2026-02-30
 mark 2
 list
 unmark 2
@@ -19,11 +19,15 @@ test
 todo
 deadline
 deadline /by
+deadline test /by 10-10-2026
 event
 event /from
 event /from /to
 event test /to today
 event test /to today /from tomorrow
+event test /from 2011-10-10
+event test /from 10-10-2011 /to 10-10-2012
+event /to 2011-10-10 /from 2012-10-10
 delete 0
 delete 999
 mark 0

@@ -9,7 +9,7 @@ public class Revel {
 
     private final Ui ui;
     private final Storage storage;
-    TaskList storedTasks;
+    private TaskList storedTasks;
 
     public Revel(String filePath) {
         ui = new Ui();
@@ -18,7 +18,7 @@ public class Revel {
         try {
             storedTasks = new TaskList(storage.load()); // <-- actually populate your in-memory list
         } catch (RevelException e) {
-           ui.showLoadingError();
+            ui.showLoadingError();
             storedTasks = new TaskList();
         }
     }

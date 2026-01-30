@@ -1,9 +1,9 @@
 package revel.task;
 
-import revel.Parser;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import revel.Parser;
 
 public class Deadline extends Task {
     protected final LocalDateTime byDate;
@@ -19,6 +19,7 @@ public class Deadline extends Task {
 
     @Override
     public String toFileString() {
-        return "DL | " + (isDone ? 1 : 0) + " | " + description + " | " + byDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        return "DL | " + (isDone ? 1 : 0) + " | " + description + " | "
+                + byDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 }

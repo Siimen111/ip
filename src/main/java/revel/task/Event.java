@@ -1,9 +1,9 @@
 package revel.task;
 
-import revel.Parser;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import revel.Parser;
 
 public class Event extends Task {
     protected final LocalDateTime fromDate;

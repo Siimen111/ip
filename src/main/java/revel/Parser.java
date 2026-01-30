@@ -1,5 +1,13 @@
 package revel;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import revel.command.ByeCommand;
 import revel.command.Command;
 import revel.command.CommandWord;
@@ -12,15 +20,6 @@ import revel.command.ListCommand;
 import revel.command.MarkCommand;
 import revel.command.TodoCommand;
 import revel.command.UnmarkCommand;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class Parser {
     // alias -> command words

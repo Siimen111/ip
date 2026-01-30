@@ -6,6 +6,15 @@ import revel.task.Task;
 import revel.task.TaskList;
 import revel.ui.Ui;
 
+
+/**
+ * Unmarks a task in the task list as completed.
+ * <p>
+ * The task to i,mark is identified by a task number provided in {@code argsLine}
+ * (e.g., {@code "2"} for the second task). After unmarking the task, this command
+ * attempts to save the updated task list to disk.
+ * </p>
+ */
 public class UnmarkCommand extends Command {
     private final String argsLine;
 

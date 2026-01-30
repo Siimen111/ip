@@ -1,10 +1,10 @@
 package revel.task;
 
-import revel.Parser;
-import revel.RevelException;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import revel.Parser;
+import revel.RevelException;
 
 public class TaskList {
     final ArrayList<Task> storedTasks;

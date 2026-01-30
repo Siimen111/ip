@@ -1,11 +1,20 @@
 package revel.command;
 
+import revel.Parser;
 import revel.RevelException;
 import revel.storage.Storage;
+import revel.task.Deadline;
 import revel.task.Task;
 import revel.task.TaskList;
 import revel.ui.Ui;
 
+/**
+ * Removes a {@link Task} task to the task list.
+ * <p>
+ * After removing the task, this command attempts to persist the updated task list using {@link Storage}.
+ * If saving fails, a warning is shown to the user.
+ * </p>
+ */
 public class DeleteCommand extends Command {
     private final String argsLine;
 

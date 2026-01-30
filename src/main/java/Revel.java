@@ -1,6 +1,4 @@
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.stream.IntStream;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,10 +8,12 @@ import java.time.format.DateTimeParseException;
 
 public class Revel {
 
+    private final Ui ui;
     private final Storage storage;
     ArrayList<Task> storedTasks;
 
     public Revel(String filePath) {
+        ui = new Ui();
         storage = new Storage(filePath);
         storedTasks = new ArrayList<>();
 
@@ -25,19 +25,11 @@ public class Revel {
     }
 
     public void run() {
-        Scanner sc = new Scanner(System.in);
-
-        String intro = """
-                ____________________________________________________________
-                 Hello! I'm Revel
-                 What can I do for you?
-                ____________________________________________________________
-                """;
-        String indent = "____________________________________________________________";
-        System.out.println(intro);
+        ui.showIntro();
         boolean exitLoop = false;
+
         while (true) {
-            String input = sc.nextLine().trim();
+            String input = ui.readCommand();
             try {
                 if (input.isEmpty()) {
                     throw new RevelException(("Please enter a command. Type help for a list of commands available to you."));
@@ -50,20 +42,17 @@ public class Revel {
                 Command cmd = Command.parse(commandStr);
                 switch (cmd) {
                     case HELLO -> {
-                        System.out.println(intro);
+                        ui.showIntro();
                         continue;
                     }
                     case BYE -> {
-                        System.out.println(indent + "\n Bye. Hope to see you again soon!\n" + indent);
+                        ui.showBye();
                         exitLoop = true;
-                        saveSafely(storage, storedTasks);
+                        saveSafely(storage, storedTasks, ui);
                     }
 
                     case LIST -> {
-                        System.out.println(indent);
-                        System.out.println("Here are the tasks in your list:");
-                        IntStream.range(0, storedTasks.size()).mapToObj(i -> (i + 1) + "." + storedTasks.get(i).toString()).forEach(System.out::println);
-                        System.out.println(indent);
+                        ui.showTaskList(storedTasks);
                         continue;
                     }
 
@@ -72,10 +61,11 @@ public class Revel {
                             throw new RevelException("Sorry, but the description of todo cannot be empty.\n" +
                                     "Usage: todo <description>");
                         }
+
                         Task selectedTask = new ToDo(argsLine);
                         storedTasks.add(selectedTask);
-                        printTask(selectedTask, storedTasks.size());
-                        saveSafely(storage, storedTasks);
+                        ui.showTaskAdded(selectedTask, storedTasks.size());
+                        saveSafely(storage, storedTasks, ui);
                         continue;
                     }
 
@@ -92,16 +82,17 @@ public class Revel {
 
                         String taskDesc = trimSubstringLeft(argsLine, "/by");
                         String dateTime = trimSubstringRight(argsLine, "/by");
+
                         if (taskDesc.isEmpty() || dateTime.isEmpty()) {
                             throw new RevelException("Sorry, but the format used is invalid.\n" +
                                     "Usage: deadline <description> /by <date/time>");
                         }
-
                         LocalDateTime byDate = parseToLocalDateTime(dateTime);
+
                         Task selectedTask = new Deadline(taskDesc, byDate);
                         storedTasks.add(selectedTask);
-                        printTask(selectedTask, storedTasks.size());
-                        saveSafely(storage, storedTasks);
+                        ui.showTaskAdded(selectedTask, storedTasks.size());
+                        saveSafely(storage, storedTasks, ui);
                         continue;
                     }
 
@@ -136,57 +127,49 @@ public class Revel {
                         LocalDateTime fromDate = parseToLocalDateTime(endDate);
                         Task selectedTask = new Event(taskDesc, toDate, fromDate);
                         storedTasks.add(selectedTask);
-                        printTask(selectedTask, storedTasks.size());
-                        saveSafely(storage, storedTasks);
+                        ui.showTaskAdded(selectedTask, storedTasks.size());
+                        saveSafely(storage, storedTasks, ui);
                         continue;
                     }
 
                     case MARK -> {
                         Task selectedTask = markTask(argsLine, storedTasks);
-                        System.out.println(indent + "\n" + " Nice! I've marked this task as done:\n  "
-                                + selectedTask + "\n" + indent);
-                        saveSafely(storage, storedTasks);
+                        ui.showTaskMarked(selectedTask);
+                        saveSafely(storage, storedTasks, ui);
                         continue;
                     }
 
                     case UNMARK -> {
                         Task selectedTask = unmarkTask(argsLine, storedTasks);
-                        System.out.println(indent + "\n" + " OK, I've marked this task as not done yet:\n  "
-                                + selectedTask + "\n" + indent);
-                        saveSafely(storage, storedTasks);
+                        ui.showTaskUnMarked(selectedTask);
+                        saveSafely(storage, storedTasks, ui);
                         continue;
                     }
 
                     case DELETE -> {
                         Task selectedTask = deleteTask(argsLine, storedTasks);
-                        System.out.println("____________________________________________________________");
-                        System.out.println(" Got it. I've removed this task:");
-                        System.out.println(selectedTask.toString());
-                        System.out.println("Now you have " + storedTasks.size() + " tasks in the list.");
-                        System.out.println("____________________________________________________________");
-                        saveSafely(storage, storedTasks);
+                        ui.showTaskDeleted(selectedTask, storedTasks.size());
+                        saveSafely(storage, storedTasks, ui);
                     }
 
                     case HELP -> {
-                        System.out.println("Available Commands: " + Command.helpText());
+                        ui.showHelp(Command.helpText());
                         continue;
                     }
                 }
             } catch (RevelException e) {
-                System.out.println(indent + "\n " + e.getMessage() + "\n" + indent);
+                ui.showError(e.getMessage());
             }
             if (exitLoop) {
                 break;
             }
 
         }
-        sc.close();
+        ui.close();
     }
 
     public static void main(String[] args) {
-
         new Revel("data/tasks.txt").run();
-
     }
 
 
@@ -262,15 +245,6 @@ public class Revel {
         return selectedTask;
     }
 
-    private static void printTask(Task task, int itemCount) {
-        String indent = "____________________________________________________________";
-        System.out.println(indent);
-        System.out.println("Got it. I've added this task: ");
-        System.out.println(task);
-        System.out.println("Now you have " + (itemCount) + " tasks in the list.");
-        System.out.println(indent);
-    }
-
     private static String trimSubstringLeft(String str, String delimiter) {
         return str.substring(0, str.indexOf(delimiter)).trim();
     }
@@ -285,14 +259,11 @@ public class Revel {
         return str.substring(start, end).trim();
     }
 
-    private static void saveSafely(Storage storage, ArrayList<Task> storedTasks) {
+    private static void saveSafely(Storage storage, ArrayList<Task> storedTasks, Ui ui) {
         try {
             storage.save(storedTasks);
         } catch (IOException e) {
-            String indent = "____________________________________________________________";
-            System.out.println(indent);
-            System.out.println(" Warning: could not save tasks to disk: " + e.getMessage());
-            System.out.println(indent);
+            ui.showSaveWarning(e.getMessage());
         }
     }
 

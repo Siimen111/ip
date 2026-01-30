@@ -10,9 +10,23 @@ import java.time.format.DateTimeParseException;
 
 public class Revel {
 
-    public static void main(String[] args) {
+    private final Storage storage;
+    ArrayList<Task> storedTasks;
+
+    public Revel(String filePath) {
+        storage = new Storage(filePath);
+        storedTasks = new ArrayList<>();
+
+        try {
+            storedTasks.addAll(storage.load()); // <-- actually populate your in-memory list
+        } catch (IOException e) {
+            // file missing / can't read: start empty
+        }
+    }
+
+    public void run() {
         Scanner sc = new Scanner(System.in);
-        ArrayList<Task> storedTasks = new ArrayList<>();
+
         String intro = """
                 ____________________________________________________________
                  Hello! I'm Revel
@@ -21,13 +35,6 @@ public class Revel {
                 """;
         String indent = "____________________________________________________________";
         System.out.println(intro);
-        Storage storage = new Storage("data/Revel.txt");
-        try {
-            storedTasks.addAll(storage.load()); // <-- actually populate your in-memory list
-        } catch (IOException e) {
-            // file missing / can't read: start empty
-        }
-
         boolean exitLoop = false;
         while (true) {
             String input = sc.nextLine().trim();
@@ -169,11 +176,17 @@ public class Revel {
                 System.out.println(indent + "\n " + e.getMessage() + "\n" + indent);
             }
             if (exitLoop) {
-                    break;
-                }
+                break;
+            }
 
         }
         sc.close();
+    }
+
+    public static void main(String[] args) {
+
+        new Revel("data/tasks.txt").run();
+
     }
 
 

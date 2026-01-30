@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.stream.IntStream;
 import java.util.ArrayList;
@@ -15,6 +16,12 @@ public class Revel {
                 """;
         String indent = "____________________________________________________________";
         System.out.println(intro);
+        Storage storage = new Storage("data/Revel.txt");
+        try {
+            storedTasks.addAll(storage.load()); // <-- actually populate your in-memory list
+        } catch (IOException e) {
+            // file missing / can't read: start empty
+        }
 
         boolean exitLoop = false;
         while (true) {
@@ -37,6 +44,7 @@ public class Revel {
                     case BYE -> {
                         System.out.println(indent + "\n Bye. Hope to see you again soon!\n" + indent);
                         exitLoop = true;
+                        saveSafely(storage, storedTasks);
                     }
 
                     case LIST -> {
@@ -55,6 +63,7 @@ public class Revel {
                         Task selectedTask = new ToDo(argsLine);
                         storedTasks.add(selectedTask);
                         printTask(selectedTask, storedTasks.size());
+                        saveSafely(storage, storedTasks);
                         continue;
                     }
 
@@ -79,6 +88,7 @@ public class Revel {
                         Task selectedTask = new Deadline(taskDesc, dateTime);
                         storedTasks.add(selectedTask);
                         printTask(selectedTask, storedTasks.size());
+                        saveSafely(storage, storedTasks);
                         continue;
                     }
 
@@ -112,6 +122,7 @@ public class Revel {
                         Task selectedTask = new Event(taskDesc, startDate, endDate);
                         storedTasks.add(selectedTask);
                         printTask(selectedTask, storedTasks.size());
+                        saveSafely(storage, storedTasks);
                         continue;
                     }
 
@@ -119,6 +130,7 @@ public class Revel {
                         Task selectedTask = markTask(argsLine, storedTasks);
                         System.out.println(indent + "\n" + " Nice! I've marked this task as done:\n  "
                                 + selectedTask + "\n" + indent);
+                        saveSafely(storage, storedTasks);
                         continue;
                     }
 
@@ -126,6 +138,7 @@ public class Revel {
                         Task selectedTask = unmarkTask(argsLine, storedTasks);
                         System.out.println(indent + "\n" + " OK, I've marked this task as not done yet:\n  "
                                 + selectedTask + "\n" + indent);
+                        saveSafely(storage, storedTasks);
                         continue;
                     }
 
@@ -136,6 +149,7 @@ public class Revel {
                         System.out.println(selectedTask.toString());
                         System.out.println("Now you have " + storedTasks.size() + " tasks in the list.");
                         System.out.println("____________________________________________________________");
+                        saveSafely(storage, storedTasks);
                     }
 
                     case HELP -> {
@@ -249,4 +263,16 @@ public class Revel {
         int end = str.indexOf(endDelimiter, start);
         return str.substring(start, end).trim();
     }
+
+    private static void saveSafely(Storage storage, ArrayList<Task> storedTasks) {
+        try {
+            storage.save(storedTasks);
+        } catch (IOException e) {
+            String indent = "____________________________________________________________";
+            System.out.println(indent);
+            System.out.println(" Warning: could not save tasks to disk: " + e.getMessage());
+            System.out.println(indent);
+        }
+    }
+
 }

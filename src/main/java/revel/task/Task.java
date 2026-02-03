@@ -5,15 +5,29 @@ import java.time.format.DateTimeFormatter;
 
 import revel.ToDo;
 
+/**
+ * Represents a task in the task list.
+ */
 public abstract class Task {
     protected final String description;
     protected boolean isDone;
 
+    /**
+     * Creates a task with the given description.
+     *
+     * @param description Task description.
+     */
     public Task(String description) {
         this.description = description;
         this.isDone = false;
     }
 
+    /**
+     * Parses a task from its file storage representation.
+     *
+     * @param line Serialized task string.
+     * @return Parsed task instance.
+     */
     public static Task fromFileString(String line) {
         String[] parts = line.split("\\s*\\|\\s*", -1);
 
@@ -45,26 +59,52 @@ public abstract class Task {
         return task;
     }
 
+    /**
+     * Returns the task description.
+     *
+     * @return Description text.
+     */
     public String getDescription() {
         return this.description;
     }
 
+    /**
+     * Returns the completion status icon.
+     *
+     * @return "X" if done, otherwise a blank space.
+     */
     public String getStatusIcon() {
         return (this.isDone ? "X" : " ");
     }
 
+    /**
+     * Marks the task as completed.
+     */
     public void markAsDone() {
         this.isDone = true;
     }
 
+    /**
+     * Marks the task as not completed.
+     */
     public void markAsUndone() {
         this.isDone = false;
     }
 
+    /**
+     * Returns the user-facing representation of the task.
+     *
+     * @return Formatted task string.
+     */
     @Override
     public String toString() {
         return "[" + this.getStatusIcon() + "] " + this.description;
     }
 
+    /**
+     * Returns the file storage representation of this task.
+     *
+     * @return Serialized task string.
+     */
     public abstract String toFileString();
 }

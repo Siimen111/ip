@@ -13,7 +13,9 @@ import revel.RevelException;
 import revel.task.Task;
 import revel.task.TaskList;
 
-
+/**
+ * Manages loading and saving tasks to disk.
+ */
 public class Storage {
     private final Path filePath;
 
@@ -21,6 +23,12 @@ public class Storage {
         this.filePath = Paths.get(relativePath);
     }
 
+    /**
+     * Loads tasks from the configured storage file.
+     *
+     * @return List of tasks (empty if file does not exist).
+     * @throws RevelException If the file cannot be read.
+     */
     public List<Task> load() throws RevelException {
         try {
             if (Files.notExists(filePath)) {
@@ -41,6 +49,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Saves tasks to the configured storage file.
+     *
+     * @param tasks Task list to persist.
+     * @throws RevelException If the tasks cannot be saved.
+     */
     public void save(TaskList tasks) throws RevelException {
         try {
             Files.createDirectories(filePath.getParent());

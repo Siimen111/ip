@@ -1,9 +1,7 @@
 package revel.command;
 
-import revel.Parser;
 import revel.RevelException;
 import revel.storage.Storage;
-import revel.task.Deadline;
 import revel.task.Task;
 import revel.task.TaskList;
 import revel.ui.Ui;

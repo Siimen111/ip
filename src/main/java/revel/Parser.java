@@ -22,6 +22,9 @@ import revel.command.MarkCommand;
 import revel.command.TodoCommand;
 import revel.command.UnmarkCommand;
 
+/**
+ * Parses user input into commands and command arguments.
+ */
 public class Parser {
     // alias -> command words
     private static final Map<String, CommandWord> ALIASES = new LinkedHashMap<>();
@@ -37,8 +40,19 @@ public class Parser {
     private static final DateTimeFormatter OUT_DATE_TIME = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     // Record classes for storing parsed task commands
+    /**
+     * Represents the split input of a command word and its argument line.
+     */
     public record ParsedInput(String command, String argsLine) {}
+
+    /**
+     * Represents parsed deadline arguments.
+     */
     public record DeadlineArgs(String description, LocalDateTime byDate) {}
+
+    /**
+     * Represents parsed event arguments.
+     */
     public record EventArgs(String description, LocalDateTime fromDate, LocalDateTime toDate) {}
 
     static {
@@ -63,6 +77,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses a command word token into a supported {@link CommandWord}.
+     *
+     * @param token Raw token representing a command word.
+     * @return Parsed command word.
+     * @throws RevelException If the command word is not supported.
+     */
     public static CommandWord parseWord(String token) throws RevelException {
         String key = token.trim().toLowerCase();
         CommandWord word = ALIASES.get(key);
@@ -73,6 +94,11 @@ public class Parser {
         return word;
     }
 
+    /**
+     * Returns a comma-separated list of supported command words and aliases.
+     *
+     * @return Help text for the supported commands.
+     */
     public static String helpText() {
         // unique + stable order (LinkedHashMap preserves insertion order)
         return ALIASES.keySet().stream()
@@ -80,6 +106,13 @@ public class Parser {
                 .collect(Collectors.joining(", "));
     }
 
+    /**
+     * Parses a raw command line into a concrete {@link Command}.
+     *
+     * @param rawCommand Full command line from user input.
+     * @return Parsed command instance.
+     * @throws RevelException If parsing fails or arguments are invalid.
+     */
     public static Command parse(String rawCommand) throws RevelException {
         ParsedInput parsedInput = parseInput(rawCommand);
         CommandWord commandWord = parseWord(parsedInput.command());
@@ -126,19 +159,24 @@ public class Parser {
 
         case HELP -> {
             return new HelpCommand();
-            }
+        }
 
         case FIND -> {
             return new FindCommand(argsLine);
         }
-        }
         default -> throw new RevelException(" Sorry! I am unable to assist you with that.\n"
                 + "Type 'help' for a list of commands available to you.");
-
         }
     }
 
 
+    /**
+     * Splits input into a command word and the argument string.
+     *
+     * @param input Raw user input.
+     * @return Parsed input with command and argument line.
+     * @throws RevelException If the input is empty.
+     */
     public static ParsedInput parseInput(String input) throws RevelException {
         String trimmedInput = input.trim();
         if (trimmedInput.isEmpty()) {
@@ -152,6 +190,13 @@ public class Parser {
         return new ParsedInput(commandStr, argsLine);
     }
 
+    /**
+     * Parses a todo task description.
+     *
+     * @param argsLine Argument string for a todo command.
+     * @return Description for the todo task.
+     * @throws RevelException If the description is empty.
+     */
     public static String parseTodo(String argsLine) throws RevelException {
         if (argsLine.isEmpty()) {
             throw new RevelException(" Sorry, but the description of todo cannot be empty.\n"
@@ -160,6 +205,13 @@ public class Parser {
         return argsLine;
     }
 
+    /**
+     * Parses deadline task arguments.
+     *
+     * @param argsLine Argument string for a deadline command.
+     * @return Parsed deadline arguments.
+     * @throws RevelException If the arguments are invalid.
+     */
     public static DeadlineArgs parseDeadline(String argsLine) throws RevelException {
         if (argsLine.isEmpty()) {
             throw new RevelException(" Sorry, but the description of deadline cannot be empty.\n"
@@ -183,6 +235,13 @@ public class Parser {
         return new DeadlineArgs(taskDesc, byDate);
     }
 
+    /**
+     * Parses event task arguments.
+     *
+     * @param argsLine Argument string for an event command.
+     * @return Parsed event arguments.
+     * @throws RevelException If the arguments are invalid.
+     */
     public static EventArgs parseEvent(String argsLine) throws RevelException {
         if (argsLine.isEmpty()) {
             throw new RevelException(" Sorry, but the description of event cannot be empty.\n"
@@ -216,6 +275,13 @@ public class Parser {
         return new EventArgs(taskDesc, fromDate, toDate);
     }
 
+    /**
+     * Parses a number from an argument string.
+     *
+     * @param argsLine Argument string containing a number.
+     * @return Parsed integer.
+     * @throws RevelException If the input is not a number.
+     */
     public static int parseNumber(String argsLine) throws RevelException {
         try {
             return Integer.parseInt(argsLine.trim());
@@ -224,6 +290,14 @@ public class Parser {
         }
     }
 
+    /**
+     * Validates that a task number is within the list bounds.
+     *
+     * @param taskNumber Task number provided by the user.
+     * @param itemCount Total number of tasks.
+     * @return Validated task number.
+     * @throws RevelException If the number is out of range.
+     */
     public static int parseTaskNumber(int taskNumber, int itemCount) throws RevelException {
 
         if (taskNumber > itemCount || taskNumber <= 0) {
@@ -267,6 +341,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Formats a date-time for user display.
+     *
+     * @param dt Date-time to format.
+     * @return Formatted string for output.
+     */
     public static String formatForUser(LocalDateTime dt) {
         // If you want date-only display when time is 00:00:
         if (dt.getHour() == 0 && dt.getMinute() == 0) {
@@ -283,6 +363,14 @@ public class Parser {
         return str.substring(str.indexOf(delimiter) + delimiter.length()).trim();
     }
 
+    /**
+     * Trims the substring between the given delimiters.
+     *
+     * @param str Input string.
+     * @param startDelimiter Start delimiter.
+     * @param endDelimiter End delimiter.
+     * @return Trimmed substring between the delimiters.
+     */
     public static String trimSubstring(String str, String startDelimiter, String endDelimiter) {
         int start = str.indexOf(startDelimiter) + startDelimiter.length();
         int end = str.indexOf(endDelimiter, start);

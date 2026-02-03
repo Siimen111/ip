@@ -1,11 +1,13 @@
 package revel.command;
 
-
 import revel.RevelException;
 import revel.storage.Storage;
 import revel.task.TaskList;
 import revel.ui.Ui;
 
+/**
+ * Finds tasks whose descriptions contain a keyword.
+ */
 public class FindCommand extends Command {
     private final String keyword;
 

@@ -2,17 +2,17 @@ package revel.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.nio.file.Path;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import revel.task.ToDo;
 import revel.task.Deadline;
 import revel.task.TaskList;
+import revel.task.ToDo;
 
 public class StorageTest {
     @TempDir

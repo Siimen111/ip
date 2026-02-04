@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import revel.core.Revel;
+import revel.ui.MainWindow;
 
 /**
  * Entry point for the Revel JavaFX application.

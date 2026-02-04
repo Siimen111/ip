@@ -3,8 +3,6 @@ package revel.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import revel.ToDo;
-
 /**
  * Represents a task in the task list.
  */

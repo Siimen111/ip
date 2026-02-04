@@ -1,7 +1,7 @@
 package revel.command;
 
 import revel.RevelException;
-import revel.ToDo;
+import revel.task.ToDo;
 import revel.storage.Storage;
 import revel.task.Task;
 import revel.task.TaskList;

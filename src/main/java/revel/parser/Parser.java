@@ -1,4 +1,4 @@
-package revel;
+package revel.parser;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import revel.RevelException;
 import revel.command.ByeCommand;
 import revel.command.Command;
 import revel.command.CommandWord;
@@ -74,7 +75,7 @@ public class Parser {
         // register aliases here
         register(CommandWord.HELLO, "hello", "hi");
         register(CommandWord.BYE, "bye", "exit");
-        register(CommandWord.LIST, "list");
+        register(CommandWord.LIST, "list", "tasks");
         register(CommandWord.TODO, "todo");
         register(CommandWord.DEADLINE, "deadline");
         register(CommandWord.EVENT, "event");

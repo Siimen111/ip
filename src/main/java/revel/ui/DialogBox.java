@@ -1,4 +1,4 @@
-package revel;
+package revel.ui;
 
 import java.util.Collections;
 

@@ -3,7 +3,7 @@ package revel.ui;
 import java.util.Scanner;
 import java.util.stream.IntStream;
 
-import revel.Parser;
+import revel.parser.Parser;
 import revel.task.Task;
 import revel.task.TaskList;
 
@@ -96,6 +96,9 @@ public class Ui {
      * @param tasks Task list to display.
      */
     public String showTaskList(TaskList tasks) {
+        if (tasks.getSize() == 0) {
+            return " You have no tasks in your list!";
+        }
         StringBuilder sb = new StringBuilder(" Here are the tasks in your list:");
         IntStream.range(0, tasks.getSize())
                 .mapToObj(i -> (i + 1) + "." + tasks.get(i).toString())

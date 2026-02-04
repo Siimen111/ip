@@ -3,7 +3,7 @@ package revel.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import revel.Parser;
+import revel.parser.Parser;
 
 /**
  * Represents a task with a start and end date.

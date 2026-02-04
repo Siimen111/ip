@@ -10,8 +10,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-import revel.Parser;
-import revel.Revel;
+import revel.parser.Parser;
+import revel.core.Revel;
 import revel.RevelException;
 import revel.command.Command;
 

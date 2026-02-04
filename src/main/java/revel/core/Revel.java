@@ -1,5 +1,7 @@
-package revel;
+package revel.core;
 
+import revel.parser.Parser;
+import revel.RevelException;
 import revel.command.Command;
 import revel.storage.Storage;
 import revel.task.TaskList;

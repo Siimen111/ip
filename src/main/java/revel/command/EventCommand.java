@@ -1,6 +1,6 @@
 package revel.command;
 
-import revel.Parser;
+import revel.parser.Parser;
 import revel.RevelException;
 import revel.storage.Storage;
 import revel.task.Event;

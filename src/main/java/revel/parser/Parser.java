@@ -1,4 +1,4 @@
-package revel;
+package revel.parser;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import revel.RevelException;
 import revel.command.ByeCommand;
 import revel.command.Command;
 import revel.command.CommandWord;

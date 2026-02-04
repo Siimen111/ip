@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import revel.command.ByeCommand;
 import revel.command.Command;
+import revel.parser.Parser;
 
 public class ParserTest {
     @Test

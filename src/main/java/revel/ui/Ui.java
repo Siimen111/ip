@@ -3,7 +3,7 @@ package revel.ui;
 import java.util.Scanner;
 import java.util.stream.IntStream;
 
-import revel.Parser;
+import revel.parser.Parser;
 import revel.task.Task;
 import revel.task.TaskList;
 

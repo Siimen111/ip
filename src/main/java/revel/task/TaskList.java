@@ -3,7 +3,7 @@ package revel.task;
 import java.util.ArrayList;
 import java.util.List;
 
-import revel.Parser;
+import revel.parser.Parser;
 import revel.RevelException;
 
 /**

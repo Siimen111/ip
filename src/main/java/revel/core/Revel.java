@@ -1,8 +1,8 @@
 package revel.core;
 
-import revel.parser.Parser;
 import revel.RevelException;
 import revel.command.Command;
+import revel.parser.Parser;
 import revel.storage.Storage;
 import revel.task.TaskList;
 import revel.ui.Ui;

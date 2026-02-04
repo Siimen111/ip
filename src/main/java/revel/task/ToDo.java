@@ -1,6 +1,4 @@
-package revel;
-
-import revel.task.Task;
+package revel.task;
 
 /**
  * Represents a todo task without date constraints.

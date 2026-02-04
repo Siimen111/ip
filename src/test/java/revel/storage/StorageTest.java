@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import revel.ToDo;
+import revel.task.ToDo;
 import revel.task.Deadline;
 import revel.task.TaskList;
 

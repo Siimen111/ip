@@ -1,7 +1,7 @@
 package revel.command;
 
-import revel.parser.Parser;
 import revel.RevelException;
+import revel.parser.Parser;
 import revel.storage.Storage;
 import revel.task.Deadline;
 import revel.task.Task;

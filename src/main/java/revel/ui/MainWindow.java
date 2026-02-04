@@ -10,15 +10,17 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-import revel.parser.Parser;
-import revel.core.Revel;
 import revel.RevelException;
 import revel.command.Command;
+import revel.core.Revel;
+import revel.parser.Parser;
 
 /**
  * Controller for the main window layout and user interactions.
  */
 public class MainWindow extends AnchorPane {
+    private static final double EXIT_DELAY_SECONDS = 2.0;
+
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -32,7 +34,6 @@ public class MainWindow extends AnchorPane {
 
     private Image userImage = new Image(this.getClass().getClassLoader().getResourceAsStream("images/user.png"));
     private Image revelImage = new Image(this.getClass().getClassLoader().getResourceAsStream("images/revel.png"));
-    private static final double EXIT_DELAY_SECONDS = 2.0;
 
     @FXML
     public void initialize() {

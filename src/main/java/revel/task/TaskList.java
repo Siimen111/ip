@@ -3,8 +3,8 @@ package revel.task;
 import java.util.ArrayList;
 import java.util.List;
 
-import revel.parser.Parser;
 import revel.RevelException;
+import revel.parser.Parser;
 
 /**
  * Stores and manages a list of tasks.

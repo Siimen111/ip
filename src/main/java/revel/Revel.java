@@ -35,26 +35,21 @@ public class Revel {
      * Runs the main input-processing loop.
      */
     public void run() {
-        ui.showLine();
-        ui.showIntro();
-        ui.showLine();
 
         boolean isExit = false;
 
         while (!isExit) {
             try {
                 String fullCommand = ui.readCommand();
-                ui.showLine();
                 Command c = Parser.parse(fullCommand);
-                c.execute(storedTasks, ui, storage);
+                String response = c.execute(storedTasks, ui, storage);
+                System.out.println(response);
                 isExit = c.isExit();
             } catch (RevelException e) {
-                ui.showError(e.getMessage());
-            } finally {
-                ui.showLine();
+                System.out.println(ui.showError(e.getMessage()));
             }
+            ui.close();
         }
-        ui.close();
     }
 
     /**
@@ -66,4 +61,15 @@ public class Revel {
         new Revel("data/tasks.txt").run();
     }
 
+    /**
+     * Generates a response for the user's chat message
+     */
+    public String getResponse(String input) {
+        try {
+            Command c = Parser.parse(input);
+            return c.execute(storedTasks, ui, storage);
+        } catch (RevelException e) {
+            return ui.showError(e.getMessage());
+        }
+    }
 }

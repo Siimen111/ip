@@ -29,6 +29,21 @@ public class Parser {
     // alias -> command words
     private static final Map<String, CommandWord> ALIASES = new LinkedHashMap<>();
     // DateTime Constants
+    private static final String MESSAGE_UNKNOWN_COMMAND =
+            " Sorry! I am unable to assist you with that.\n"
+                    + "Type 'help' for a list of commands available to you.";
+    private static final String MESSAGE_EMPTY_TODO =
+            " Sorry, but the description of todo cannot be empty.\n"
+                    + "Usage: todo <description>";
+    private static final String MESSAGE_EMPTY_DEADLINE =
+            " Sorry, but the description of deadline cannot be empty.\n"
+                    + "Usage: deadline <description> /by <date/time>";
+    private static final String MESSAGE_MISSING_BY =
+            " Missing /by.\n"
+                    + "Usage: deadline <description> /by <date/time>";
+    private static final String MESSAGE_EMPTY_EVENT =
+            " Sorry, but the description of event cannot be empty.\n"
+                    + "Usage: event <description> /from <start date> /to <end date>";
     private static final DateTimeFormatter IN_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter IN_YMD_HHMM = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     private static final DateTimeFormatter IN_YMD_HH_COLON_MM = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -88,8 +103,7 @@ public class Parser {
         String key = token.trim().toLowerCase();
         CommandWord word = ALIASES.get(key);
         if (word == null) {
-            throw new RevelException(" Sorry! I am unable to assist you with that.\n"
-                    + "Type 'help' for a list of commands available to you.");
+            throw new RevelException(MESSAGE_UNKNOWN_COMMAND);
         }
         return word;
     }
@@ -164,8 +178,7 @@ public class Parser {
         case FIND -> {
             return new FindCommand(argsLine);
         }
-        default -> throw new RevelException(" Sorry! I am unable to assist you with that.\n"
-                + "Type 'help' for a list of commands available to you.");
+        default -> throw new RevelException(MESSAGE_UNKNOWN_COMMAND);
         }
     }
 
@@ -199,8 +212,7 @@ public class Parser {
      */
     public static String parseTodo(String argsLine) throws RevelException {
         if (argsLine.isEmpty()) {
-            throw new RevelException(" Sorry, but the description of todo cannot be empty.\n"
-                    + "Usage: todo <description>");
+            throw new RevelException(MESSAGE_EMPTY_TODO);
         }
         return argsLine;
     }
@@ -214,13 +226,11 @@ public class Parser {
      */
     public static DeadlineArgs parseDeadline(String argsLine) throws RevelException {
         if (argsLine.isEmpty()) {
-            throw new RevelException(" Sorry, but the description of deadline cannot be empty.\n"
-                    + "Usage: deadline <description> /by <date/time>");
+            throw new RevelException(MESSAGE_EMPTY_DEADLINE);
         }
 
         if (!argsLine.contains("/by")) {
-            throw new RevelException(" Missing /by.\n"
-                    + "Usage: deadline <description> /by <date/time>");
+            throw new RevelException(MESSAGE_MISSING_BY);
         }
 
         String taskDesc = trimSubstringLeft(argsLine, "/by");
@@ -244,8 +254,7 @@ public class Parser {
      */
     public static EventArgs parseEvent(String argsLine) throws RevelException {
         if (argsLine.isEmpty()) {
-            throw new RevelException(" Sorry, but the description of event cannot be empty.\n"
-                    + "Usage: event <description> /from <start date> /to <end date>");
+            throw new RevelException(MESSAGE_EMPTY_EVENT);
         }
 
         if (!argsLine.contains("/from") || !argsLine.contains("/to")) {

@@ -10,7 +10,7 @@ import revel.ui.Ui;
 public class HelloCommand extends Command {
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
-        ui.showIntro();
+    public String execute(TaskList tasks, Ui ui, Storage storage) {
+        return ui.showIntro();
     }
 }

@@ -25,7 +25,7 @@ public abstract class Command {
      * @param storage The storage handler used to load/save tasks.
      * @throws RevelException If the command cannot be executed due to invalid input or storage errors.
      */
-    public abstract void execute(TaskList tasks, Ui ui, Storage storage) throws RevelException;
+    public abstract String execute(TaskList tasks, Ui ui, Storage storage) throws RevelException;
 
     public boolean isExit() {
         return false;

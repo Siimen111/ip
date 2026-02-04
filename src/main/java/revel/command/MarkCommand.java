@@ -22,13 +22,14 @@ public class MarkCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws RevelException {
+    public String execute(TaskList tasks, Ui ui, Storage storage) throws RevelException {
         Task selectedTask = tasks.markTask(this.argsLine);
-        ui.showTaskMarked(selectedTask);
+        String response = ui.showTaskMarked(selectedTask);
         try {
             storage.save(tasks);
         } catch (RevelException e) {
-            ui.showSaveWarning(e.getMessage());
+            response += "\n" + ui.showSaveWarning(e.getMessage());
         }
+        return response;
     }
 }

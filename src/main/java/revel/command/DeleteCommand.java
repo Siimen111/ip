@@ -21,13 +21,14 @@ public class DeleteCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws RevelException {
+    public String execute(TaskList tasks, Ui ui, Storage storage) throws RevelException {
         Task selectedTask = tasks.deleteTask(this.argsLine);
-        ui.showTaskDeleted(selectedTask, tasks.getSize());
+        String response = ui.showTaskDeleted(selectedTask, tasks.getSize());
         try {
             storage.save(tasks);
         } catch (RevelException e) {
-            ui.showSaveWarning(e.getMessage());
+            response += "\n" + ui.showSaveWarning(e.getMessage());
         }
+        return response;
     }
 }

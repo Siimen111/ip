@@ -16,8 +16,8 @@ public class FindCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws RevelException {
+    public String execute(TaskList tasks, Ui ui, Storage storage) throws RevelException {
         TaskList foundTasks = tasks.findTasks(keyword);
-        ui.showFoundTaskList(foundTasks);
+        return ui.showFoundTaskList(foundTasks);
     }
 }

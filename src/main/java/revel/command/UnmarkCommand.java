@@ -23,13 +23,14 @@ public class UnmarkCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws RevelException {
+    public String execute(TaskList tasks, Ui ui, Storage storage) throws RevelException {
         Task selectedTask = tasks.unmarkTask(this.argsLine);
-        ui.showTaskUnmarked(selectedTask);
+        String response = ui.showTaskUnmarked(selectedTask);
         try {
             storage.save(tasks);
         } catch (RevelException e) {
-            ui.showSaveWarning(e.getMessage());
+            response += "\n" + ui.showSaveWarning(e.getMessage());
         }
+        return response;
     }
 }

@@ -26,15 +26,15 @@ public class Ui {
     /**
      * Prints a separator line.
      */
-    public void showLine() {
-        System.out.println(LINE);
+    public String showLine() {
+        return LINE;
     }
 
     /**
      * Prints the introduction message.
      */
-    public void showIntro() {
-        System.out.println(INTRO_LINE);
+    public String showIntro() {
+        return INTRO_LINE;
     }
 
     /**
@@ -49,8 +49,8 @@ public class Ui {
     /**
      * Prints the farewell message.
      */
-    public void showBye() {
-        System.out.println(" Bye. Hope to see you again soon!");
+    public String showBye() {
+        return " Bye. Hope to see you again soon!";
     }
 
     /**
@@ -58,23 +58,23 @@ public class Ui {
      *
      * @param message Error text.
      */
-    public void showError(String message) {
-        System.out.println(message);
+    public String showError(String message) {
+        return message;
     }
 
     /**
      * Prints a loading error message.
      */
-    public void showLoadingError() {
-        System.out.println(" Loading error occurred! Task List not found!\n"
-                + "Creating new empty task list...");
+    public String showLoadingError() {
+        return " Loading error occurred! Task List not found!\n"
+                + "Creating new empty task list...";
     }
 
     /**
      * Prints a help message with the supported commands.
      */
-    public void showHelp() {
-        System.out.println(" Available Commands: " + Parser.helpText());
+    public String showHelp() {
+        return " Available Commands: " + Parser.helpText();
     }
 
     /**
@@ -82,11 +82,12 @@ public class Ui {
      *
      * @param tasks Task list to display.
      */
-    public void showFoundTaskList(TaskList tasks) {
-        System.out.println(" Here are the matching tasks in your list:");
+    public String showFoundTaskList(TaskList tasks) {
+        StringBuilder sb = new StringBuilder(" Here are the matching tasks in your list:");
         IntStream.range(0, tasks.getSize())
                 .mapToObj(i -> (i + 1) + "." + tasks.get(i).toString())
-                .forEach(System.out::println);
+                .forEach(line -> sb.append("\n").append(line));
+        return sb.toString();
     }
 
     /**
@@ -94,11 +95,12 @@ public class Ui {
      *
      * @param tasks Task list to display.
      */
-    public void showTaskList(TaskList tasks) {
-        System.out.println(" Here are the tasks in your list:");
+    public String showTaskList(TaskList tasks) {
+        StringBuilder sb = new StringBuilder(" Here are the tasks in your list:");
         IntStream.range(0, tasks.getSize())
                 .mapToObj(i -> (i + 1) + "." + tasks.get(i).toString())
-                .forEach(System.out::println);
+                .forEach(line -> sb.append("\n").append(line));
+        return sb.toString();
     }
 
     /**
@@ -107,10 +109,10 @@ public class Ui {
      * @param task Added task.
      * @param itemCount Current task count.
      */
-    public void showTaskAdded(Task task, int itemCount) {
-        System.out.println(" Got it. I've added this task:");
-        System.out.println(task);
-        System.out.println("Now you have " + itemCount + " tasks in the list.");
+    public String showTaskAdded(Task task, int itemCount) {
+        return " Got it. I've added this task:" + "\n"
+                + task.toString() + "\n"
+                + "Now you have " + itemCount + " tasks in the list.";
     }
 
     /**
@@ -118,9 +120,9 @@ public class Ui {
      *
      * @param task Marked task.
      */
-    public void showTaskMarked(Task task) {
-        System.out.println(" Nice! I've marked this task as done:\n  "
-                + task);
+    public String showTaskMarked(Task task) {
+        return " Nice! I've marked this task as done:\n  "
+                + task;
     }
 
     /**
@@ -128,9 +130,9 @@ public class Ui {
      *
      * @param task Unmarked task.
      */
-    public void showTaskUnmarked(Task task) {
-        System.out.println(" OK, I've marked this task as not done yet:\n  "
-                + task);
+    public String showTaskUnmarked(Task task) {
+        return " OK, I've marked this task as not done yet:\n  "
+                + task;
     }
 
     /**
@@ -139,10 +141,10 @@ public class Ui {
      * @param task Deleted task.
      * @param remainingItemCount Remaining task count.
      */
-    public void showTaskDeleted(Task task, int remainingItemCount) {
-        System.out.println(" Got it. I've removed this task:");
-        System.out.println(task.toString());
-        System.out.println("Now you have " + remainingItemCount + " tasks in the list.");
+    public String showTaskDeleted(Task task, int remainingItemCount) {
+        return " Got it. I've removed this task:" + "\n"
+                + task.toString() + "\n"
+                + "Now you have " + remainingItemCount + " tasks in the list.";
     }
 
     /**
@@ -150,8 +152,8 @@ public class Ui {
      *
      * @param message Error detail.
      */
-    public void showSaveWarning(String message) {
-        System.out.println(" Warning: could not save tasks to disk: " + message);
+    public String showSaveWarning(String message) {
+        return " Warning: could not save tasks to disk: " + message;
     }
 
     /**

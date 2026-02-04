@@ -22,14 +22,15 @@ public class TodoCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
+    public String execute(TaskList tasks, Ui ui, Storage storage) {
         Task selectedTask = new ToDo(this.description);
         tasks.addTask(selectedTask);
-        ui.showTaskAdded(selectedTask, tasks.getSize());
+        String response = ui.showTaskAdded(selectedTask, tasks.getSize());
         try {
             storage.save(tasks);
         } catch (RevelException e) {
-            ui.showSaveWarning(e.getMessage());
+            response += "\n" + ui.showSaveWarning(e.getMessage());
         }
+        return response;
     }
 }

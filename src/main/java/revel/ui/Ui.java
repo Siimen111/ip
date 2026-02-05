@@ -11,7 +11,6 @@ import revel.task.TaskList;
  * Handles user interaction and console output.
  */
 public class Ui {
-    private static final String LINE = "____________________________________________________________";
     private static final String INTRO_LINE = " Hello! I'm Revel\n"
                   + " What can I do for you?";
     final Scanner sc;
@@ -23,12 +22,6 @@ public class Ui {
         sc = new Scanner(System.in);
     }
 
-    /**
-     * Prints a separator line.
-     */
-    public String showLine() {
-        return LINE;
-    }
 
     /**
      * Prints the introduction message.
@@ -62,12 +55,18 @@ public class Ui {
         return message;
     }
 
+    private String joinLines(String... lines) {
+        return String.join("\n", lines);
+    }
+
     /**
      * Prints a loading error message.
      */
     public String showLoadingError() {
-        return " Loading error occurred! Task List not found!\n"
-                + "Creating new empty task list...";
+        return joinLines(
+                " Loading error occurred! Task List not found!",
+                "Creating new empty task list..."
+        );
     }
 
     /**
@@ -113,9 +112,11 @@ public class Ui {
      * @param itemCount Current task count.
      */
     public String showTaskAdded(Task task, int itemCount) {
-        return " Got it. I've added this task:" + "\n"
-                + task.toString() + "\n"
-                + "Now you have " + itemCount + " tasks in the list.";
+        return joinLines(
+                " Got it. I've added this task:",
+                task.toString(),
+                "Now you have " + itemCount + " tasks in the list."
+        );
     }
 
     /**
@@ -124,8 +125,9 @@ public class Ui {
      * @param task Marked task.
      */
     public String showTaskMarked(Task task) {
-        return " Nice! I've marked this task as done:\n  "
-                + task;
+        return joinLines(
+                " Nice! I've marked this task as done: ",
+                task.toString());
     }
 
     /**
@@ -134,8 +136,9 @@ public class Ui {
      * @param task Unmarked task.
      */
     public String showTaskUnmarked(Task task) {
-        return " OK, I've marked this task as not done yet:\n  "
-                + task;
+        return joinLines(
+                " OK, I've marked this task as not done yet: ",
+                task.toString());
     }
 
     /**
@@ -145,9 +148,10 @@ public class Ui {
      * @param remainingItemCount Remaining task count.
      */
     public String showTaskDeleted(Task task, int remainingItemCount) {
-        return " Got it. I've removed this task:" + "\n"
-                + task.toString() + "\n"
-                + "Now you have " + remainingItemCount + " tasks in the list.";
+        return joinLines(
+                " Got it. I've removed this task:",
+                task.toString(),
+                "Now you have " + remainingItemCount + " tasks in the list.");
     }
 
     /**

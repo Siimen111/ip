@@ -131,6 +131,17 @@ public class Ui {
     }
 
     /**
+     * Prints confirmation that a task was already marked as done.
+     *
+     * @param task Marked task.
+     */
+    public String showTaskAlreadyMarked(Task task) {
+        return joinLines(
+                " This task is already marked as done: ",
+                task.toString());
+    }
+
+    /**
      * Prints confirmation that a task was marked as not done.
      *
      * @param task Unmarked task.
@@ -138,6 +149,17 @@ public class Ui {
     public String showTaskUnmarked(Task task) {
         return joinLines(
                 " OK, I've marked this task as not done yet: ",
+                task.toString());
+    }
+
+    /**
+     * Prints confirmation that a task was already marked as not done.
+     *
+     * @param task Unmarked task.
+     */
+    public String showTaskAlreadyUnmarked(Task task) {
+        return joinLines(
+                " This task is already marked as not done: ",
                 task.toString());
     }
 

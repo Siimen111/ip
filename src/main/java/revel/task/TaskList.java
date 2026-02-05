@@ -70,6 +70,42 @@ public class TaskList {
         return this.storedTasks.get(selectedNumber - 1);
     }
 
+    private Task getTaskForUpdate(String argsLine, String actionPast, String actionCommand) throws RevelException {
+        int itemCount = this.storedTasks.size();
+        if (itemCount == 0) {
+            throw new RevelException("Sorry, but there are no tasks to be " + actionPast + ".\n"
+                    + "Add a task and try again.");
+        }
+
+        if (argsLine.isEmpty()) {
+            throw new RevelException("Sorry, but the task number cannot be empty.\n"
+                    + "Usage: " + actionCommand + " <number>");
+        }
+        return getTask(argsLine);
+    }
+
+    /**
+     * Returns the task to be marked.
+     *
+     * @param argsLine Argument string containing a task number.
+     * @return Selected task.
+     * @throws RevelException If the task number is invalid.
+     */
+    public Task getTaskForMarking(String argsLine) throws RevelException {
+        return getTaskForUpdate(argsLine, "marked", "mark");
+    }
+
+    /**
+     * Returns the task to be unmarked.
+     *
+     * @param argsLine Argument string containing a task number.
+     * @return Selected task.
+     * @throws RevelException If the task number is invalid.
+     */
+    public Task getTaskForUnmarking(String argsLine) throws RevelException {
+        return getTaskForUpdate(argsLine, "unmarked", "unmark");
+    }
+
     /**
      * Adds a task to the list.
      *
@@ -87,17 +123,7 @@ public class TaskList {
      * @throws RevelException If the task number is invalid.
      */
     public Task markTask(String argsLine) throws RevelException {
-        int itemCount = this.storedTasks.size();
-        if (itemCount == 0) {
-            throw new RevelException("Sorry, but there are no tasks to be marked.\n"
-                    + "Add a task and try again.");
-        }
-
-        if (argsLine.isEmpty()) {
-            throw new RevelException("Sorry, but the task number cannot be empty.\n"
-                    + "Usage: mark <number>");
-        }
-        Task selectedTask = getTask(argsLine);
+        Task selectedTask = getTaskForMarking(argsLine);
         selectedTask.markAsDone();
         return selectedTask;
     }
@@ -110,17 +136,7 @@ public class TaskList {
      * @throws RevelException If the task number is invalid.
      */
     public Task unmarkTask(String argsLine) throws RevelException {
-        int itemCount = this.storedTasks.size();
-        if (itemCount == 0) {
-            throw new RevelException("Sorry, but there are no tasks to be unmarked.\n"
-                    + "Add a task and try again.");
-        }
-
-        if (argsLine.isEmpty()) {
-            throw new RevelException("Sorry, but the task number cannot be empty.\n"
-                    + "Usage: unmark <number>");
-        }
-        Task selectedTask = getTask(argsLine);
+        Task selectedTask = getTaskForUnmarking(argsLine);
         selectedTask.markAsUndone();
         return selectedTask;
     }

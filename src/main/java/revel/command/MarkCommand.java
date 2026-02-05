@@ -23,7 +23,12 @@ public class MarkCommand extends Command {
 
     @Override
     public String execute(TaskList tasks, Ui ui, Storage storage) throws RevelException {
-        Task selectedTask = tasks.markTask(this.argsLine);
+        Task selectedTask = tasks.getTaskForMarking(this.argsLine);
+        if (selectedTask.isDone()) {
+            return ui.showTaskAlreadyMarked(selectedTask);
+        }
+
+        selectedTask.markAsDone();
         String response = ui.showTaskMarked(selectedTask);
         try {
             storage.save(tasks);

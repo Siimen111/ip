@@ -24,7 +24,12 @@ public class UnmarkCommand extends Command {
 
     @Override
     public String execute(TaskList tasks, Ui ui, Storage storage) throws RevelException {
-        Task selectedTask = tasks.unmarkTask(this.argsLine);
+        Task selectedTask = tasks.getTaskForUnmarking(this.argsLine);
+        if (!selectedTask.isDone()) {
+            return ui.showTaskAlreadyUnmarked(selectedTask);
+        }
+
+        selectedTask.markAsUndone();
         String response = ui.showTaskUnmarked(selectedTask);
         try {
             storage.save(tasks);

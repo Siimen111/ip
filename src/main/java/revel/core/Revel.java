@@ -15,7 +15,6 @@ public class Revel {
     private final Ui ui;
     private final Storage storage;
     private TaskList storedTasks;
-    private String loadingErrorMessage;
 
     /**
      * Creates a Revel instance using the given storage file path.
@@ -74,9 +73,5 @@ public class Revel {
         } catch (RevelException e) {
             return ui.showError(e.getMessage());
         }
-    }
-
-    public String getLoadingErrorMessage() {
-        return loadingErrorMessage;
     }
 }

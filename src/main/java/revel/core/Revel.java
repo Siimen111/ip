@@ -1,5 +1,8 @@
 package revel.core;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import revel.RevelException;
 import revel.command.Command;
 import revel.parser.Parser;
@@ -13,17 +16,21 @@ import revel.ui.Ui;
 public class Revel {
 
     private final Ui ui;
+    private static final String TASKS_FILE_NAME = "tasks.txt";
+
     private final Storage storage;
     private TaskList storedTasks;
+    private final Path dataDir;
 
     /**
-     * Creates a Revel instance using the given storage file path.
+     * Creates a Revel instance using the given data directory.
      *
-     * @param filePath Path to the task storage file.
+     * @param dataDir Directory containing the storage files.
      */
-    public Revel(String filePath) {
+    public Revel(String dataDir) {
+        this.dataDir = Paths.get(dataDir);
         ui = new Ui();
-        storage = new Storage(filePath);
+        storage = new Storage(this.dataDir.resolve(TASKS_FILE_NAME));
 
         try {
             storedTasks = new TaskList(storage.load()); // <-- actually populate your in-memory list
@@ -60,7 +67,7 @@ public class Revel {
      * @param args Command line arguments.
      */
     public static void main(String[] args) {
-        new Revel("data/tasks.txt").run();
+        new Revel("data").run();
     }
 
     /**

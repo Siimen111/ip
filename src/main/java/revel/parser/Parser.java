@@ -74,15 +74,15 @@ public class Parser {
     static {
         // register aliases here
         register(CommandWord.HELLO, "hello", "hi");
-        register(CommandWord.BYE, "bye", "exit");
-        register(CommandWord.LIST, "list", "tasks");
-        register(CommandWord.TODO, "todo");
-        register(CommandWord.DEADLINE, "deadline");
-        register(CommandWord.EVENT, "event");
-        register(CommandWord.MARK, "mark");
-        register(CommandWord.UNMARK, "unmark");
-        register(CommandWord.DELETE, "delete");
-        register(CommandWord.HELP, "help");
+        register(CommandWord.BYE, "bye", "exit", "bb");
+        register(CommandWord.LIST, "list", "tasks", "ls");
+        register(CommandWord.TODO, "todo", "t");
+        register(CommandWord.DEADLINE, "deadline", "dl");
+        register(CommandWord.EVENT, "event", "evt");
+        register(CommandWord.MARK, "mark", "tick");
+        register(CommandWord.UNMARK, "unmark", "untick");
+        register(CommandWord.DELETE, "delete", "del");
+        register(CommandWord.HELP, "help", "h");
         register(CommandWord.FIND, "find");
     }
 

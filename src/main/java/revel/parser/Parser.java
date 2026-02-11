@@ -366,10 +366,16 @@ public class Parser {
     }
 
     private static String trimSubstringLeft(String str, String delimiter) {
+        assert str != null : "str cannot be null";
+        assert delimiter != null : "delimiter cannot be null";
+        assert str.contains(delimiter) : "delimiter cannot be found";
         return str.substring(0, str.indexOf(delimiter)).trim();
     }
 
     private static String trimSubstringRight(String str, String delimiter) {
+        assert str != null : "str cannot be null";
+        assert delimiter != null : "delimiter cannot be null";
+        assert str.contains(delimiter) : "delimiter cannot be found";
         return str.substring(str.indexOf(delimiter) + delimiter.length()).trim();
     }
 
@@ -382,9 +388,20 @@ public class Parser {
      * @return Trimmed substring between the delimiters.
      */
     public static String trimSubstring(String str, String startDelimiter, String endDelimiter) {
-        int start = str.indexOf(startDelimiter) + startDelimiter.length();
-        int end = str.indexOf(endDelimiter, start);
-        return str.substring(start, end).trim();
+        assert str != null : "str cannot be null";
+        assert startDelimiter != null : "delimiter cannot be null";
+        assert endDelimiter != null : "delimiter cannot be null";
+
+
+        int startIndex = str.indexOf(startDelimiter);
+        int endIndex = str.indexOf(endDelimiter, startIndex);
+
+        assert startIndex >= 0 : "startDelimiter cannot be found";
+        assert endIndex >= 0 : "endDelimiter cannot be found";
+        assert endIndex >= startIndex : "endDelimiter index is before startLimiter index";
+        int start = startIndex + startDelimiter.length();
+
+        return str.substring(start, endIndex).trim();
     }
 }
 

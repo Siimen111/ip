@@ -19,9 +19,8 @@ public class MainApp extends Application {
 
     private static final int MIN_WINDOW_HEIGHT = 220;
     private static final int MIN_WINDOW_WIDTH = 417;
-    private static final String FILE_PATH = "data/tasks.txt";
-
-    private final Revel revel = new Revel(FILE_PATH);
+    private static final String DATA_DIR = "data/";
+    private final Revel revel = new Revel(DATA_DIR);
 
     @Override
     public void start(Stage stage) {

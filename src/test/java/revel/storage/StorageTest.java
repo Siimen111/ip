@@ -21,7 +21,7 @@ public class StorageTest {
     @Test
     void saveThenLoad_roundTrip_ok() throws Exception {
         Path file = tempDir.resolve("tasks.txt");
-        Storage storage = new Storage(file.toString());
+        Storage storage = new Storage(file);
 
         TaskList list = new TaskList();
         list.addTask(new ToDo("read book"));
@@ -38,7 +38,7 @@ public class StorageTest {
     @Test
     void load_missingFile_returnsEmptyList() throws Exception {
         Path file = tempDir.resolve("missing.txt");
-        Storage storage = new Storage(file.toString());
+        Storage storage = new Storage(file);
 
         List<?> loaded = storage.load();
         assertEquals(0, loaded.size());
@@ -52,7 +52,7 @@ public class StorageTest {
                 + "TD | 0 | read book\n"
                 + "\n",
                 java.nio.charset.StandardCharsets.UTF_8);
-        Storage storage = new Storage(file.toString());
+        Storage storage = new Storage(file);
 
         TaskList loaded = new TaskList(storage.load());
         assertEquals(1, loaded.getSize());
@@ -62,7 +62,7 @@ public class StorageTest {
     @Test
     void save_createsParentDirectories() throws Exception {
         Path file = tempDir.resolve("nested").resolve("tasks.txt");
-        Storage storage = new Storage(file.toString());
+        Storage storage = new Storage(file);
 
         TaskList list = new TaskList();
         list.addTask(new ToDo("read book"));

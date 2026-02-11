@@ -1,8 +1,12 @@
 package revel.core;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import revel.RevelException;
 import revel.command.Command;
 import revel.parser.Parser;
+import revel.storage.AliasStorage;
 import revel.storage.Storage;
 import revel.task.TaskList;
 import revel.ui.Ui;
@@ -12,24 +16,35 @@ import revel.ui.Ui;
  */
 public class Revel {
 
+    private static final String TASKS_FILE_NAME = "tasks.txt";
+    private static final String ALIASES_FILE_NAME = "aliases.json";
     private final Ui ui;
     private final Storage storage;
+    private final AliasStorage aliasStorage;
     private TaskList storedTasks;
+    private final Path dataDir;
 
     /**
-     * Creates a Revel instance using the given storage file path.
+     * Creates a Revel instance using the given data directory.
      *
-     * @param filePath Path to the task storage file.
+     * @param dataDir Directory containing the storage files.
      */
-    public Revel(String filePath) {
+    public Revel(String dataDir) {
+        this.dataDir = Paths.get(dataDir);
         ui = new Ui();
-        storage = new Storage(filePath);
-
+        storage = new Storage(this.dataDir.resolve(TASKS_FILE_NAME));
+        aliasStorage = new AliasStorage(this.dataDir.resolve(ALIASES_FILE_NAME));
+        Parser.setAliasStorage(aliasStorage);
         try {
-            storedTasks = new TaskList(storage.load()); // <-- actually populate your in-memory list
+            storedTasks = new TaskList(storage.load());
         } catch (RevelException e) {
             System.out.println(ui.showLoadingError());
             storedTasks = new TaskList();
+        }
+        try {
+            Parser.replaceUserAliases(aliasStorage.load());
+        } catch (RevelException e) {
+            System.out.println(ui.showError(e.getMessage()));
         }
     }
 
@@ -50,8 +65,8 @@ public class Revel {
             } catch (RevelException e) {
                 System.out.println(ui.showError(e.getMessage()));
             }
-            ui.close();
         }
+        ui.close();
     }
 
     /**
@@ -60,7 +75,7 @@ public class Revel {
      * @param args Command line arguments.
      */
     public static void main(String[] args) {
-        new Revel("data/tasks.txt").run();
+        new Revel("data").run();
     }
 
     /**

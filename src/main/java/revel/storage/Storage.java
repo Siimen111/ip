@@ -37,10 +37,14 @@ public class Storage {
 
             List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
 
-            return lines.stream()
-                    .filter(line -> !line.isBlank())
-                    .map(Task::fromFileString)
-                    .toList();
+            List<Task> tasks = new ArrayList<>();
+            for (String line : lines) {
+                if (line.isBlank()) {
+                    continue;
+                }
+                tasks.add(Task.fromFileString(line));
+            }
+            return tasks;
         } catch (IOException e) {
             throw new RevelException("Unable to load tasks from file: " + filePath);
         }

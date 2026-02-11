@@ -17,7 +17,11 @@ import revel.ui.MainWindow;
  */
 public class MainApp extends Application {
 
-    private Revel revel = new Revel("data/tasks.txt");
+    private static final int MIN_WINDOW_HEIGHT = 220;
+    private static final int MIN_WINDOW_WIDTH = 417;
+    private static final String FILE_PATH = "data/tasks.txt";
+
+    private final Revel revel = new Revel(FILE_PATH);
 
     @Override
     public void start(Stage stage) {
@@ -27,8 +31,8 @@ public class MainApp extends Application {
             Scene scene = new Scene(ap);
             stage.setScene(scene);
             stage.setTitle("Revel Chatbot");
-            stage.setMinHeight(220);
-            stage.setMinWidth(417);
+            stage.setMinHeight(MIN_WINDOW_HEIGHT);
+            stage.setMinWidth(MIN_WINDOW_WIDTH);
             fxmlLoader.<MainWindow>getController().setRevel(revel);
             stage.show();
         } catch (IOException e) {

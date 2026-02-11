@@ -3,10 +3,36 @@ package revel.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import revel.RevelException;
+
+
 /**
  * Represents a task in the task list.
  */
 public abstract class Task {
+    private enum TaskType {
+        TODO("TD"),
+        DEADLINE("DL"),
+        EVENT("E");
+
+        final String code;
+        TaskType(String code) {
+            this.code = code;
+        }
+
+        static TaskType fromCode(String code) throws RevelException {
+            for (TaskType t : TaskType.values()) {
+                if (t.code.equals(code)) {
+                    return t;
+                }
+            }
+            throw new RevelException("Unknown task type: " + code);
+        }
+    }
+
+    private static final String DONE_FLAG = "1";
+    private static final String DONE_ICON = "X";
+    private static final String NOT_DONE_ICON = " ";
     protected final String description;
     protected boolean isDone;
 
@@ -29,29 +55,30 @@ public abstract class Task {
      * @param line Serialized task string.
      * @return Parsed task instance.
      */
-    public static Task fromFileString(String line) {
+    public static Task fromFileString(String line) throws RevelException {
         String[] parts = line.split("\\s*\\|\\s*", -1);
 
         String type = parts[0];
-        boolean isDone = parts[1].equals("1");
+        TaskType taskType = TaskType.fromCode(type);
+        boolean isDone = parts[1].equals(DONE_FLAG);
         String desc = parts[2];
 
         Task task;
-        switch (type) {
-        case "TD":
+        switch (taskType) {
+        case TODO:
             task = new ToDo(desc);
             break;
-        case "DL":
+        case DEADLINE:
             LocalDateTime byDate = LocalDateTime.parse(parts[3], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
             task = new Deadline(desc, byDate);
             break;
-        case "E":
+        case EVENT:
             LocalDateTime fromDate = LocalDateTime.parse(parts[3], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
             LocalDateTime toDate = LocalDateTime.parse(parts[4], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
             task = new Event(desc, fromDate, toDate);
             break;
         default:
-            throw new IllegalArgumentException("Unknown task type:" + type);
+            throw new RevelException("Unknown task type: " + type);
         }
 
         if (isDone) {
@@ -75,7 +102,7 @@ public abstract class Task {
      * @return "X" if done, otherwise a blank space.
      */
     public String getStatusIcon() {
-        return (this.isDone ? "X" : " ");
+        return (this.isDone ? DONE_ICON : NOT_DONE_ICON);
     }
 
     /**

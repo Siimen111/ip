@@ -56,6 +56,7 @@ public class Storage {
      * @throws RevelException If the tasks cannot be saved.
      */
     public void save(TaskList tasks) throws RevelException {
+        assert tasks != null : "tasks cannot be null";
         try {
             Files.createDirectories(filePath.getParent());
             List<String> lines = new ArrayList<>();

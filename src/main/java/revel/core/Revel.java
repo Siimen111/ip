@@ -20,9 +20,7 @@ public class Revel {
     private static final String ALIASES_FILE_NAME = "aliases.json";
     private final Ui ui;
     private final Storage storage;
-    private final AliasStorage aliasStorage;
     private TaskList storedTasks;
-    private final Path dataDir;
 
     /**
      * Creates a Revel instance using the given data directory.
@@ -30,10 +28,10 @@ public class Revel {
      * @param dataDir Directory containing the storage files.
      */
     public Revel(String dataDir) {
-        this.dataDir = Paths.get(dataDir);
+        Path dataDirPath = Paths.get(dataDir);
         ui = new Ui();
-        storage = new Storage(this.dataDir.resolve(TASKS_FILE_NAME));
-        aliasStorage = new AliasStorage(this.dataDir.resolve(ALIASES_FILE_NAME));
+        storage = new Storage(dataDirPath.resolve(TASKS_FILE_NAME));
+        AliasStorage aliasStorage = new AliasStorage(dataDirPath.resolve(ALIASES_FILE_NAME));
         Parser.setAliasStorage(aliasStorage);
         try {
             storedTasks = new TaskList(storage.load());

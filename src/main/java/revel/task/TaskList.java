@@ -181,14 +181,11 @@ public class TaskList {
         }
 
         String key = k.toLowerCase();
-        List<Task> matches = new ArrayList<>();
 
-        for (Task t : storedTasks) {
-            String lock = t.getDescription().toLowerCase();
-            if (lock.contains(key)) {
-                matches.add(t);
-            }
-        }
+        List<Task> matches = storedTasks.stream()
+                .filter(t -> t.getDescription().toLowerCase().contains(key))
+                .toList();
+
         return new TaskList(matches);
     }
 

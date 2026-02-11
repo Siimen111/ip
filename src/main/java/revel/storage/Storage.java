@@ -36,14 +36,11 @@ public class Storage {
             }
 
             List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
-            List<Task> tasks = new ArrayList<>();
-            for (String line : lines) {
-                if (line.isBlank()) {
-                    continue;
-                }
-                tasks.add(Task.fromFileString(line));
-            }
-            return tasks;
+
+            return lines.stream()
+                    .filter(line -> !line.isBlank())
+                    .map(Task::fromFileString)
+                    .toList();
         } catch (IOException e) {
             throw new RevelException("Unable to load tasks from file: " + filePath);
         }
@@ -59,11 +56,13 @@ public class Storage {
         assert tasks != null : "tasks cannot be null";
         try {
             Files.createDirectories(filePath.getParent());
-            List<String> lines = new ArrayList<>();
+            // List<String> lines = new ArrayList<>();
 
-            for (Task t : tasks.getTaskList()) {
-                lines.add(t.toFileString());
-            }
+            List<String> lines = tasks.getTaskList()
+                    .stream()
+                    .map(Task::toFileString)
+                    .toList();
+
 
             Files.write(filePath, lines, StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE,

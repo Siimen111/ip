@@ -23,7 +23,7 @@ public class ParserTest {
 
     @Test
     void parse_deadlineWithDmyTime_parsesToLocalDateTime() throws Exception {
-        Parser.DeadlineArgs d = Parser.parseDeadline("return book /by 2/12/2019 1800");
+        TaskArgumentParser.DeadlineArgs d = TaskArgumentParser.parseDeadline("return book /by 2/12/2019 1800");
         assertEquals("return book", d.description());
         assertEquals(LocalDateTime.of(2019, 12, 2, 18, 0), d.byDate());
     }
@@ -35,37 +35,38 @@ public class ParserTest {
 
     @Test
     void parseTodo_empty_throws() {
-        assertThrows(RevelException.class, () -> Parser.parseTodo(""));
+        assertThrows(RevelException.class, () -> TaskArgumentParser.parseTodo(""));
     }
 
     @Test
     void parseDeadline_missingBy_throws() {
-        assertThrows(RevelException.class, () -> Parser.parseDeadline("return book"));
+        assertThrows(RevelException.class, () -> TaskArgumentParser.parseDeadline("return book"));
     }
 
     @Test
     void parseDeadline_invalidDate_throws() {
-        assertThrows(RevelException.class, () -> Parser.parseDeadline("return book /by 2019-13-40"));
+        assertThrows(RevelException.class, () -> TaskArgumentParser.parseDeadline("return book /by 2019-13-40"));
     }
 
     @Test
     void parseEvent_missingFromOrTo_throws() {
-        assertThrows(RevelException.class, () -> Parser.parseEvent("party /from 2024-10-02"));
+        assertThrows(RevelException.class, () -> TaskArgumentParser.parseEvent("party /from 2024-10-02"));
     }
 
     @Test
     void parseEvent_fromAfterTo_throws() {
-        assertThrows(RevelException.class, () -> Parser.parseEvent("party /to 2024-10-02 /from 2024-10-01"));
+        assertThrows(RevelException.class, () -> TaskArgumentParser
+                .parseEvent("party /to 2024-10-02 /from 2024-10-01"));
     }
 
     @Test
     void parseNumber_nonNumeric_throws() {
-        assertThrows(RevelException.class, () -> Parser.parseNumber("abc"));
+        assertThrows(RevelException.class, () -> TaskArgumentParser.parseNumber("abc"));
     }
 
     @Test
     void parseTaskNumber_outOfRange_throws() {
-        assertThrows(RevelException.class, () -> Parser.parseTaskNumber(0, 3));
+        assertThrows(RevelException.class, () -> TaskArgumentParser.parseTaskNumber(0, 3));
     }
 
     @Test

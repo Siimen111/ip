@@ -35,6 +35,7 @@ public class DialogBox extends HBox {
 
         dialog.setText(text);
         displayPicture.setImage(i);
+        dialog.getStyleClass().add("dialog-text");
     }
 
     private void flip() {
@@ -42,15 +43,41 @@ public class DialogBox extends HBox {
         Collections.reverse(tmp);
         getChildren().setAll(tmp);
         setAlignment(Pos.TOP_LEFT);
+        getStyleClass().add("app-row");
+        dialog.getStyleClass().add("app-msg");
     }
 
     public static DialogBox getUserDialog(String text, Image img) {
-        return new DialogBox(text, img);
+        var db = new DialogBox(text, img);
+        db.getStyleClass().add("user-row");
+        db.dialog.getStyleClass().add("user-msg");
+        db.displayPicture.setManaged(false);
+        db.displayPicture.setVisible(false);
+        return db;
     }
-
-    public static DialogBox getRevelDialog(String text, Image img) {
+    private void changeDialogStyle(String commandType) {
+        switch (commandType) {
+        case "TodoCommand", "DeadlineCommand", "EventCommand":
+            dialog.getStyleClass().add("add-label");
+            break;
+        case "MarkCommand":
+            dialog.getStyleClass().add("marked-label");
+            break;
+        case "UnmarkCommand":
+            dialog.getStyleClass().add("unmarked-label");
+            break;
+        case "DeleteCommand":
+            dialog.getStyleClass().add("delete-label");
+            break;
+        case "ErrorCommand":
+        default:
+            break;
+        }
+    }
+    public static DialogBox getRevelDialog(String text, Image img, String commandType) {
         var db = new DialogBox(text, img);
         db.flip();
+        db.changeDialogStyle(commandType);
         return db;
     }
 }

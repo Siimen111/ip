@@ -1,7 +1,7 @@
 package revel.command;
 
 import revel.RevelException;
-import revel.parser.Parser;
+import revel.parser.TaskArgumentParser;
 import revel.storage.Storage;
 import revel.task.Deadline;
 import revel.task.Task;
@@ -11,15 +11,15 @@ import revel.ui.Ui;
 /**
  * Adds a {@link Deadline} task to the task list.
  * <p>
- * The deadline details (description and due date/time) are provided via {@link Parser.DeadlineArgs}.
+ * The deadline details (description and due date/time) are provided via {@link TaskArgumentParser.DeadlineArgs}.
  * After adding the task, this command attempts to persist the updated task list using {@link Storage}.
  * If saving fails, a warning is shown to the user.
  * </p>
  */
 public class DeadlineCommand extends Command {
-    private final Parser.DeadlineArgs deadlineArgs;
+    private final TaskArgumentParser.DeadlineArgs deadlineArgs;
 
-    public DeadlineCommand(Parser.DeadlineArgs deadlineArgs) {
+    public DeadlineCommand(TaskArgumentParser.DeadlineArgs deadlineArgs) {
         this.deadlineArgs = deadlineArgs;
     }
 

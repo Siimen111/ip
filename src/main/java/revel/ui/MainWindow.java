@@ -60,9 +60,10 @@ public class MainWindow extends AnchorPane {
             // Let getResponse handle error messaging.
         }
         String response = revel.getResponse(input);
+        String commandType = revel.getCommandType();
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getRevelDialog(response, revelImage)
+                DialogBox.getRevelDialog(response, revelImage, commandType)
         );
         userInput.clear();
         if (isExit) {

@@ -97,4 +97,11 @@ public class Revel {
     public String getCommandType() {
         return commandType == null ? COMMAND_TYPE_ERROR : commandType;
     }
+
+    /**
+     * Returns the welcome message shown when the GUI starts.
+     */
+    public String getIntroMessage() {
+        return ui.showIntro();
+    }
 }

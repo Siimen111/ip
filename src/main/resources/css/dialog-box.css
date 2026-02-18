@@ -3,6 +3,7 @@
     -fx-padding: 8 10 8 10;
     -fx-background-radius: 12;
     -fx-border-radius: 12;
+    -fx-font-weight: 700;
 }
 
 .user-msg {
@@ -35,7 +36,7 @@
 }
 
 .add-label {
-    -fx-background-color: yellow;
+    -fx-background-color: dodgerblue;
 }
 
 .marked-label {
@@ -45,6 +46,15 @@
 .unmarked-label {
     -fx-background-color: darkred;
     -fx-text-fill: white;
+}
+
+.error-label {
+    -fx-background-color: #ffe9e9;
+    -fx-text-fill: #7a1212;
+    -fx-border-color: #d64545;
+    -fx-border-width: 2px;
+    -fx-background-radius: 12 12 12 2;
+    -fx-border-radius: 12 12 12 2;
 }
 
 .delete-label {
@@ -57,10 +67,7 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 5, 5);
 
     /* Change size of image. */
-    -fx-scale-x: 1;
-    -fx-scale-y: 1;
-
-    /* Rotate image clockwise by degrees. */
-    -fx-rotate: 0;
+    -fx-scale-x: .75;
+    -fx-scale-y: .75;
 }
 

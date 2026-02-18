@@ -31,8 +31,6 @@ public class MainWindow extends AnchorPane {
     private Button sendButton;
 
     private Revel revel;
-
-    private Image userImage = new Image(this.getClass().getClassLoader().getResourceAsStream("images/user.png"));
     private Image revelImage = new Image(this.getClass().getClassLoader().getResourceAsStream("images/revel.png"));
 
     @FXML
@@ -43,6 +41,9 @@ public class MainWindow extends AnchorPane {
     /** Injects the Revel instance */
     public void setRevel(Revel r) {
         revel = r;
+        dialogContainer.getChildren().add(
+                DialogBox.getRevelDialog(revel.getIntroMessage(), revelImage, "HelloCommand")
+        );
     }
 
     /**
@@ -62,7 +63,7 @@ public class MainWindow extends AnchorPane {
         String response = revel.getResponse(input);
         String commandType = revel.getCommandType();
         dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
+                DialogBox.getUserDialog(input),
                 DialogBox.getRevelDialog(response, revelImage, commandType)
         );
         userInput.clear();

@@ -70,7 +70,7 @@ public class ParserTest {
 
     @Test
     void formatForUser_dateOnly_formatsWithoutTime() {
-        String formatted = Parser.formatForUser(LocalDateTime.of(2026, 2, 4, 0, 0));
+        String formatted = DateTimeParser.formatForUser(LocalDateTime.of(2026, 2, 4, 0, 0));
         assertEquals("04/02/2026", formatted);
     }
 }

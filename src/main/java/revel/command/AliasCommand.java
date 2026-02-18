@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import revel.RevelException;
-import revel.parser.Parser;
+import revel.parser.AliasParser;
 import revel.storage.AliasStorage;
 import revel.storage.Storage;
 import revel.task.TaskList;
@@ -54,7 +54,7 @@ public class AliasCommand extends Command {
             CommandWord commandWord = parseCommandWord(commandName);
             aliases.put(aliasKey, commandWord);
             aliasStorage.save(aliases);
-            Parser.replaceUserAliases(aliases);
+            AliasParser.replaceUserAliases(aliases);
             yield " Added alias: " + aliasKey + " -> " + commandWord.name().toLowerCase();
         }
         case REMOVE -> {
@@ -63,7 +63,7 @@ public class AliasCommand extends Command {
                 throw new RevelException("Alias does not exist: " + aliasKey);
             }
             aliasStorage.save(aliases);
-            Parser.replaceUserAliases(aliases);
+            AliasParser.replaceUserAliases(aliases);
             yield " Removed alias: " + aliasKey;
         }
         case LIST -> {

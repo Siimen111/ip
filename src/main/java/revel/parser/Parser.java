@@ -1,17 +1,8 @@
 package revel.parser;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import revel.RevelException;
-import revel.command.AliasCommand;
 import revel.command.ByeCommand;
 import revel.command.Command;
 import revel.command.CommandWord;
@@ -25,135 +16,21 @@ import revel.command.ListCommand;
 import revel.command.MarkCommand;
 import revel.command.TodoCommand;
 import revel.command.UnmarkCommand;
-import revel.storage.AliasStorage;
 
 /**
  * Parses user input into commands and command arguments.
  */
-public class Parser {
-    // alias -> command words
-    private static final Map<String, CommandWord> ALIASES = new LinkedHashMap<>();
-    // Built-in aliases (reserved)
-    private static final Set<String> BUILTIN_ALIASES;
-    private static final Map<String, CommandWord> USER_ALIASES = new LinkedHashMap<>();
-    private static AliasStorage aliasStorage;
+public class Parser extends TaskArgumentParser {
     // DateTime Constants
     private static final String MESSAGE_UNKNOWN_COMMAND =
             " Sorry! I am unable to assist you with that.\n"
                     + "Type 'help' for a list of commands available to you.";
-    private static final String MESSAGE_EMPTY_TODO =
-            " Sorry, but the description of todo cannot be empty.\n"
-                    + "Usage: todo <description>";
-    private static final String MESSAGE_EMPTY_DEADLINE =
-            " Sorry, but the description of deadline cannot be empty.\n"
-                    + "Usage: deadline <description> /by <date/time>";
-    private static final String MESSAGE_MISSING_BY =
-            " Missing /by.\n"
-                    + "Usage: deadline <description> /by <date/time>";
-    private static final String MESSAGE_EMPTY_EVENT =
-            " Sorry, but the description of event cannot be empty.\n"
-                    + "Usage: event <description> /from <start date> /to <end date>";
-    private static final String MESSAGE_WRONG_ALIAS = " Sorry, but this alias cannot be used.\n";
-    private static final String MESSAGE_ALIAS_USAGE =
-            """
-                     Usage:
-                      alias add <alias> <command>
-                      alias remove <alias>
-                      alias list
-                    """;
-    private static final DateTimeFormatter IN_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private static final DateTimeFormatter IN_YMD_HHMM = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-    private static final DateTimeFormatter IN_YMD_HH_COLON_MM = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    private static final DateTimeFormatter IN_DMY_HHMM = DateTimeFormatter
-            .ofPattern("d/M/yyyy HHmm"); // example: 2/12/2019 1800
-
-    // For printing
-    private static final DateTimeFormatter OUT_DATE = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final DateTimeFormatter OUT_DATE_TIME = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     // Record classes for storing parsed task commands
     /**
      * Represents the split input of a command word and its argument line.
      */
     public record ParsedInput(String command, String argsLine) {}
-
-    /**
-     * Represents parsed deadline arguments.
-     */
-    public record DeadlineArgs(String description, LocalDateTime byDate) {}
-
-    /**
-     * Represents parsed event arguments.
-     */
-    public record EventArgs(String description, LocalDateTime fromDate, LocalDateTime toDate) {}
-
-    static {
-        // register aliases here
-        register(CommandWord.HELLO, "hello", "hi");
-        register(CommandWord.BYE, "bye", "exit", "bb");
-        register(CommandWord.LIST, "list", "tasks", "ls");
-        register(CommandWord.TODO, "todo", "t");
-        register(CommandWord.DEADLINE, "deadline", "dl");
-        register(CommandWord.EVENT, "event", "evt");
-        register(CommandWord.MARK, "mark", "tick");
-        register(CommandWord.UNMARK, "unmark", "untick");
-        register(CommandWord.DELETE, "delete", "del");
-        register(CommandWord.HELP, "help", "h");
-        register(CommandWord.FIND, "find");
-        register(CommandWord.ALIAS, "alias");
-    }
-
-    static {
-        BUILTIN_ALIASES = new HashSet<>(ALIASES.keySet());
-    }
-
-    private static void register(CommandWord word, String... aliases) {
-        for (String a : aliases) {
-            String key = a.toLowerCase();
-            ALIASES.put(key, word);
-        }
-    }
-
-    /**
-     * Sets the alias storage used by alias commands.
-     *
-     * @param storage Alias storage instance.
-     */
-    public static void setAliasStorage(AliasStorage storage) {
-        aliasStorage = storage;
-    }
-
-    /**
-     * Registers user-defined aliases.
-     *
-     * @param userAliases Map of alias to command word.
-     */
-    public static void registerUserAliases(Map<String, CommandWord> userAliases) throws RevelException {
-        if (userAliases == null || userAliases.isEmpty()) {
-            return;
-        }
-        for (Map.Entry<String, CommandWord> entry : userAliases.entrySet()) {
-            String key = entry.getKey().toLowerCase();
-            if (BUILTIN_ALIASES.contains(key)) {
-                throw new RevelException("Alias cannot override a built-in alias: " + key);
-            }
-            USER_ALIASES.put(key, entry.getValue());
-            ALIASES.put(key, entry.getValue());
-        }
-    }
-
-    /**
-     * Replaces all user-defined aliases with the given set.
-     *
-     * @param userAliases Map of alias to command word.
-     */
-    public static void replaceUserAliases(Map<String, CommandWord> userAliases) throws RevelException {
-        for (String key : USER_ALIASES.keySet()) {
-            ALIASES.remove(key);
-        }
-        USER_ALIASES.clear();
-        registerUserAliases(userAliases);
-    }
 
     /**
      * Parses a command word token into a supported {@link CommandWord}.
@@ -164,7 +41,7 @@ public class Parser {
      */
     public static CommandWord parseWord(String token) throws RevelException {
         String key = token.trim().toLowerCase();
-        CommandWord word = ALIASES.get(key);
+        CommandWord word = AliasParser.ALIASES.get(key);
         if (word == null) {
             throw new RevelException(MESSAGE_UNKNOWN_COMMAND);
         }
@@ -178,7 +55,7 @@ public class Parser {
      */
     public static String helpText() {
         // unique + stable order (LinkedHashMap preserves insertion order)
-        return ALIASES.keySet().stream()
+        return AliasParser.ALIASES.keySet().stream()
                 .distinct()
                 .collect(Collectors.joining(", "));
     }
@@ -242,7 +119,7 @@ public class Parser {
             return new FindCommand(argsLine);
         }
         case ALIAS -> {
-            return parseAliasCommand(argsLine);
+            return AliasParser.parseAliasCommand(argsLine);
         }
         default -> throw new RevelException(MESSAGE_UNKNOWN_COMMAND);
         }
@@ -269,245 +146,6 @@ public class Parser {
         return new ParsedInput(commandStr, argsLine);
     }
 
-    /**
-     * Parses a todo task description.
-     *
-     * @param argsLine Argument string for a todo command.
-     * @return Description for the todo task.
-     * @throws RevelException If the description is empty.
-     */
-    public static String parseTodo(String argsLine) throws RevelException {
-        if (argsLine.isEmpty()) {
-            throw new RevelException(MESSAGE_EMPTY_TODO);
-        }
-        return argsLine;
-    }
-
-    /**
-     * Parses deadline task arguments.
-     *
-     * @param argsLine Argument string for a deadline command.
-     * @return Parsed deadline arguments.
-     * @throws RevelException If the arguments are invalid.
-     */
-    public static DeadlineArgs parseDeadline(String argsLine) throws RevelException {
-        if (argsLine.isEmpty()) {
-            throw new RevelException(MESSAGE_EMPTY_DEADLINE);
-        }
-
-        if (!argsLine.contains("/by")) {
-            throw new RevelException(MESSAGE_MISSING_BY);
-        }
-
-        String taskDesc = trimSubstringLeft(argsLine, "/by");
-        String rawDateTime = trimSubstringRight(argsLine, "/by");
-
-        if (taskDesc.isEmpty() || rawDateTime.isEmpty()) {
-            throw new RevelException(" Sorry, but the format used is invalid.\n"
-                    + "Usage: deadline <description> /by <date/time>");
-        }
-        LocalDateTime byDate = parseToLocalDateTime(rawDateTime);
-
-        return new DeadlineArgs(taskDesc, byDate);
-    }
-
-    /**
-     * Parses event task arguments.
-     *
-     * @param argsLine Argument string for an event command.
-     * @return Parsed event arguments.
-     * @throws RevelException If the arguments are invalid.
-     */
-    public static EventArgs parseEvent(String argsLine) throws RevelException {
-        if (argsLine.isEmpty()) {
-            throw new RevelException(MESSAGE_EMPTY_EVENT);
-        }
-
-        if (!argsLine.contains("/from") || !argsLine.contains("/to")) {
-            throw new RevelException(" Sorry, but the format used is invalid: Missing /from or /to.\n"
-                    + "Usage: event <description> /from <start date> /to <end date>");
-        }
-
-        int fromPos = argsLine.indexOf("/from");
-        int toPos = argsLine.indexOf("/to");
-
-        if (toPos < fromPos) {
-            throw new RevelException(" Sorry, but the format used is invalid: '/from' must come before '/to'.\n"
-                    + "Usage: event <description> /from <start date> /to <end date>");
-        }
-
-        String taskDesc = trimSubstringLeft(argsLine, "/from");
-        String startDate = trimSubstring(argsLine, "/from", "/to");
-        String endDate = trimSubstringRight(argsLine, "/to");
-        if (taskDesc.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
-            throw new RevelException(" Sorry, but the format used is invalid: one or more arguments are missing\n"
-                    + "Usage: event <description> /from <start date> /to <end date>");
-        }
-
-        LocalDateTime fromDate = parseToLocalDateTime(startDate);
-        LocalDateTime toDate = parseToLocalDateTime(endDate);
-
-        return new EventArgs(taskDesc, fromDate, toDate);
-    }
-
-    /**
-     * Parses a number from an argument string.
-     *
-     * @param argsLine Argument string containing a number.
-     * @return Parsed integer.
-     * @throws RevelException If the input is not a number.
-     */
-    public static int parseNumber(String argsLine) throws RevelException {
-        try {
-            return Integer.parseInt(argsLine.trim());
-        } catch (NumberFormatException e) {
-            throw new RevelException(" Sorry, but the task number must be an integer.");
-        }
-    }
-
-    /**
-     * Validates that a task number is within the list bounds.
-     *
-     * @param taskNumber Task number provided by the user.
-     * @param itemCount Total number of tasks.
-     * @return Validated task number.
-     * @throws RevelException If the number is out of range.
-     */
-    public static int parseTaskNumber(int taskNumber, int itemCount) throws RevelException {
-
-        if (taskNumber > itemCount || taskNumber <= 0) {
-            throw new RevelException(" Sorry, but the number you selected is not in the list.\n"
-                    + "Please try another number.");
-        }
-        return taskNumber;
-    }
-
-    private static AliasCommand parseAliasCommand(String argsLine) throws RevelException {
-        if (aliasStorage == null) {
-            throw new RevelException("Alias storage is not configured.");
-        }
-        if (argsLine == null || argsLine.trim().isEmpty()) {
-            throw new RevelException(MESSAGE_WRONG_ALIAS + MESSAGE_ALIAS_USAGE);
-        }
-        String[] parts = argsLine.trim().split("\\s+");
-        String action = parts[0].toLowerCase();
-
-        return switch (action) {
-        case "add" -> {
-            if (parts.length != 3) {
-                throw new RevelException(MESSAGE_WRONG_ALIAS + MESSAGE_ALIAS_USAGE);
-            }
-            String aliasKey = parts[1].toLowerCase();
-            if (BUILTIN_ALIASES.contains(aliasKey)) {
-                throw new RevelException("Alias cannot override a built-in alias: " + aliasKey);
-            }
-            yield new AliasCommand(AliasCommand.Action.ADD, parts[1], parts[2], aliasStorage);
-        }
-        case "remove" -> {
-            if (parts.length != 2) {
-                throw new RevelException(MESSAGE_WRONG_ALIAS + MESSAGE_ALIAS_USAGE);
-            }
-            String aliasKey = parts[1].toLowerCase();
-            if (BUILTIN_ALIASES.contains(aliasKey)) {
-                throw new RevelException("Cannot remove built-in alias: " + aliasKey);
-            }
-            yield new AliasCommand(AliasCommand.Action.REMOVE, parts[1], null, aliasStorage);
-        }
-        case "list" -> {
-            if (parts.length != 1) {
-                throw new RevelException(MESSAGE_ALIAS_USAGE);
-            }
-            yield new AliasCommand(AliasCommand.Action.LIST, null, null, aliasStorage);
-        }
-        default -> throw new RevelException(MESSAGE_ALIAS_USAGE);
-        };
-    }
-
-
-    private static LocalDateTime parseToLocalDateTime(String raw) throws RevelException {
-        String s = raw.trim();
-
-        DateTimeFormatter[] dateTimeFormats = {IN_YMD_HHMM, IN_YMD_HH_COLON_MM, IN_DMY_HHMM};
-
-        // Try date-time formats first
-        DateTimeParseException last = null;
-        for (DateTimeFormatter f : dateTimeFormats) {
-            try {
-                return LocalDateTime.parse(s, f);
-            } catch (DateTimeParseException e) {
-                last = e; // record the failure (catch is no longer empty)
-            }
-        }
-
-        // Then try date-only
-        try {
-            LocalDate d = LocalDate.parse(s, IN_DATE);
-            return d.atStartOfDay(); // default time 00:00 if none given
-        } catch (DateTimeParseException e) {
-
-            throw new RevelException(
-                    """
-                             Sorry, but your date/time is invalid.
-                            Accepted formats:
-                              yyyy-MM-dd
-                              yyyy-MM-dd HHmm (e.g., 2019-12-02 1800)
-                              d/M/yyyy HHmm (e.g., 2/12/2019 1800)"""
-            );
-        }
-    }
-
-    /**
-     * Formats a date-time for user display.
-     *
-     * @param dt Date-time to format.
-     * @return Formatted string for output.
-     */
-    public static String formatForUser(LocalDateTime dt) {
-        // If you want date-only display when time is 00:00:
-        if (dt.getHour() == 0 && dt.getMinute() == 0) {
-            return dt.format(OUT_DATE);
-        }
-        return dt.format(OUT_DATE_TIME);
-    }
-
-    private static String trimSubstringLeft(String str, String delimiter) {
-        assert str != null : "str cannot be null";
-        assert delimiter != null : "delimiter cannot be null";
-        assert str.contains(delimiter) : "delimiter cannot be found";
-        return str.substring(0, str.indexOf(delimiter)).trim();
-    }
-
-    private static String trimSubstringRight(String str, String delimiter) {
-        assert str != null : "str cannot be null";
-        assert delimiter != null : "delimiter cannot be null";
-        assert str.contains(delimiter) : "delimiter cannot be found";
-        return str.substring(str.indexOf(delimiter) + delimiter.length()).trim();
-    }
-
-    /**
-     * Trims the substring between the given delimiters.
-     *
-     * @param str Input string.
-     * @param startDelimiter Start delimiter.
-     * @param endDelimiter End delimiter.
-     * @return Trimmed substring between the delimiters.
-     */
-    public static String trimSubstring(String str, String startDelimiter, String endDelimiter) {
-        assert str != null : "str cannot be null";
-        assert startDelimiter != null : "delimiter cannot be null";
-        assert endDelimiter != null : "delimiter cannot be null";
-
-
-        int startIndex = str.indexOf(startDelimiter);
-        int endIndex = str.indexOf(endDelimiter, startIndex);
-
-        assert startIndex >= 0 : "startDelimiter cannot be found";
-        assert endIndex >= 0 : "endDelimiter cannot be found";
-        assert endIndex >= startIndex : "endDelimiter index is before startLimiter index";
-        int start = startIndex + startDelimiter.length();
-
-        return str.substring(start, endIndex).trim();
-    }
 }
 
 

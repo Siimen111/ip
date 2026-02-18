@@ -3,7 +3,7 @@ package revel.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import revel.parser.Parser;
+import revel.parser.DateTimeParser;
 
 /**
  * Represents a task with a start and end date.
@@ -35,8 +35,8 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + Parser.formatForUser(this.fromDate)
-                + " to: " + Parser.formatForUser(this.toDate) + ")";
+        return "[E]" + super.toString() + " (from: " + DateTimeParser.formatForUser(this.fromDate)
+                + " to: " + DateTimeParser.formatForUser(this.toDate) + ")";
     }
 
     /**

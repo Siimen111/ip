@@ -19,9 +19,11 @@ public class Revel {
 
     private static final String TASKS_FILE_NAME = "tasks.txt";
     private static final String ALIASES_FILE_NAME = "aliases.json";
+    private static final String COMMAND_TYPE_ERROR = "ErrorCommand";
     private final Ui ui;
     private final Storage storage;
     private TaskList storedTasks;
+    private String commandType;
 
     /**
      * Creates a Revel instance using the given data directory.
@@ -81,11 +83,25 @@ public class Revel {
      * Generates a response for the user's chat message
      */
     public String getResponse(String input) {
+        commandType = COMMAND_TYPE_ERROR;
         try {
             Command c = Parser.parse(input);
-            return c.execute(storedTasks, ui, storage);
+            String response = c.execute(storedTasks, ui, storage);
+            commandType = c.toString();
+            return response;
         } catch (RevelException e) {
             return ui.showError(e.getMessage());
         }
+    }
+
+    public String getCommandType() {
+        return commandType == null ? COMMAND_TYPE_ERROR : commandType;
+    }
+
+    /**
+     * Returns the welcome message shown when the GUI starts.
+     */
+    public String getIntroMessage() {
+        return ui.showIntro();
     }
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import revel.RevelException;
-import revel.parser.Parser;
+import revel.parser.TaskArgumentParser;
 
 /**
  * Stores and manages a list of tasks.
@@ -66,7 +66,7 @@ public class TaskList {
      */
     public Task getTask(String argsLine) throws RevelException {
         int itemCount = this.storedTasks.size();
-        int selectedNumber = Parser.parseTaskNumber(Parser.parseNumber(argsLine), itemCount);
+        int selectedNumber = TaskArgumentParser.parseTaskNumber(TaskArgumentParser.parseNumber(argsLine), itemCount);
         return this.storedTasks.get(selectedNumber - 1);
     }
 
@@ -160,7 +160,7 @@ public class TaskList {
                     + "Usage: delete <number>");
         }
 
-        int selectedNumber = Parser.parseTaskNumber(Parser.parseNumber(argsLine), itemCount);
+        int selectedNumber = TaskArgumentParser.parseTaskNumber(TaskArgumentParser.parseNumber(argsLine), itemCount);
         Task selectedTask = getTask(argsLine);
         this.storedTasks.remove(selectedNumber - 1);
         return selectedTask;
@@ -170,7 +170,7 @@ public class TaskList {
      * Returns tasks whose string representation contains the given keyword (case-insensitive).
      *
      * @param keyword The search keyword.
-     * @return A list of matching tasks (may be empty).
+     * @return A list of matching tasks (can be empty).
      * @throws RevelException If the keyword is empty.
      */
     public TaskList findTasks(String keyword) throws RevelException {

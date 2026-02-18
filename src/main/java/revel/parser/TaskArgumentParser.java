@@ -14,7 +14,7 @@ import revel.parser.util.ParseStringUtils;
  * validation. It produces structured argument records used by command
  * constructors.
  */
-public class TaskArgumentParser {
+public final class TaskArgumentParser {
     private static final String MESSAGE_EMPTY_TODO =
             " Sorry, but the description of todo cannot be empty.\n"
                     + "Usage: todo <description>";
@@ -27,6 +27,12 @@ public class TaskArgumentParser {
     private static final String MESSAGE_EMPTY_EVENT =
             " Sorry, but the description of event cannot be empty.\n"
                     + "Usage: event <description> /from <start date> /to <end date>";
+    private static final String MESSAGE_EMPTY_MARK =
+            "Sorry, but the task number cannot be empty.\n"
+                    + "Usage: mark <number>";
+    private static final String MESSAGE_EMPTY_UNMARK =
+            "Sorry, but the task number cannot be empty.\n"
+                    + "Usage: unmark <number>";
 
     /**
      * Parses a todo task description.
@@ -107,6 +113,38 @@ public class TaskArgumentParser {
         LocalDateTime toDate = DateTimeParser.parseToLocalDateTime(endDate);
 
         return new EventArgs(taskDesc, fromDate, toDate);
+    }
+
+    /**
+     * Parses mark command arguments.
+     *
+     * @param argsLine Argument string for a mark command.
+     * @return Normalized task number argument.
+     * @throws RevelException If the argument is empty or not an integer.
+     */
+    public static String parseMark(String argsLine) throws RevelException {
+        String trimmed = argsLine.trim();
+        if (trimmed.isEmpty()) {
+            throw new RevelException(MESSAGE_EMPTY_MARK);
+        }
+        parseNumber(trimmed);
+        return trimmed;
+    }
+
+    /**
+     * Parses unmark command arguments.
+     *
+     * @param argsLine Argument string for an unmark command.
+     * @return Normalized task number argument.
+     * @throws RevelException If the argument is empty or not an integer.
+     */
+    public static String parseUnmark(String argsLine) throws RevelException {
+        String trimmed = argsLine.trim();
+        if (trimmed.isEmpty()) {
+            throw new RevelException(MESSAGE_EMPTY_UNMARK);
+        }
+        parseNumber(trimmed);
+        return trimmed;
     }
 
     /**

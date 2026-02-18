@@ -20,7 +20,7 @@ import revel.command.UnmarkCommand;
 /**
  * Parses user input into commands and command arguments.
  */
-public class Parser extends TaskArgumentParser {
+public class Parser {
     // DateTime Constants
     private static final String MESSAGE_UNKNOWN_COMMAND =
             " Sorry! I am unable to assist you with that.\n"
@@ -86,25 +86,25 @@ public class Parser extends TaskArgumentParser {
         }
 
         case TODO -> {
-            return new TodoCommand(parseTodo(argsLine));
+            return new TodoCommand(TaskArgumentParser.parseTodo(argsLine));
         }
 
         case DEADLINE -> {
-            DeadlineArgs deadlineArgs = parseDeadline(argsLine);
+            TaskArgumentParser.DeadlineArgs deadlineArgs = TaskArgumentParser.parseDeadline(argsLine);
             return new DeadlineCommand(deadlineArgs);
         }
 
         case EVENT -> {
-            EventArgs eventArgs = parseEvent(argsLine);
+            TaskArgumentParser.EventArgs eventArgs = TaskArgumentParser.parseEvent(argsLine);
             return new EventCommand(eventArgs);
         }
 
         case MARK -> {
-            return new MarkCommand(argsLine);
+            return new MarkCommand(TaskArgumentParser.parseMark(argsLine));
         }
 
         case UNMARK -> {
-            return new UnmarkCommand(argsLine);
+            return new UnmarkCommand(TaskArgumentParser.parseUnmark(argsLine));
         }
 
         case DELETE -> {

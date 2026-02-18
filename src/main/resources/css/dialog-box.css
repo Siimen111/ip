@@ -1,0 +1,73 @@
+.dialog-text {
+    -fx-wrap-text: true;
+    -fx-padding: 8 10 8 10;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-font-weight: 700;
+}
+
+.user-msg {
+    -fx-background-color: #badec3;
+    -fx-text-fill: #0f2f1a;
+    -fx-border-color: transparent;
+    -fx-background-radius: 12 12 2 12;
+    -fx-border-radius: 12 12 2 12;
+}
+
+.app-msg {
+    -fx-background-color: linear-gradient(to bottom right, #00ffbf, #00ddff);
+    -fx-text-fill: #0f1e2f;
+    -fx-border-color:
+            linear-gradient(to right, #d55e00, #009e73)
+            linear-gradient(to bottom, #009e73, #cc79a7)
+            linear-gradient(to left, #cc79a7, #0072b2)
+            linear-gradient(to top, #0072b2, #d55e00);
+    -fx-border-width: 2px;
+    -fx-background-radius: 12 12 12 2;
+    -fx-border-radius: 12 12 12 2;
+}
+
+.user-row {
+    -fx-alignment: top-right;
+}
+
+.app-row {
+    -fx-alignment: top-left;
+}
+
+.add-label {
+    -fx-background-color: dodgerblue;
+}
+
+.marked-label {
+    -fx-background-color: palegreen;
+}
+
+.unmarked-label {
+    -fx-background-color: darkred;
+    -fx-text-fill: white;
+}
+
+.error-label {
+    -fx-background-color: #ffe9e9;
+    -fx-text-fill: #7a1212;
+    -fx-border-color: #d64545;
+    -fx-border-width: 2px;
+    -fx-background-radius: 12 12 12 2;
+    -fx-border-radius: 12 12 12 2;
+}
+
+.delete-label {
+    -fx-background-color: lightpink;
+}
+
+
+#displayPicture {
+    /* Shadow effect on image. */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 5, 5);
+
+    /* Change size of image. */
+    -fx-scale-x: .75;
+    -fx-scale-y: .75;
+}
+

@@ -1,9 +1,6 @@
 package revel.parser;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,12 +22,14 @@ import revel.command.ListCommand;
 import revel.command.MarkCommand;
 import revel.command.TodoCommand;
 import revel.command.UnmarkCommand;
+import revel.parser.util.ParseStringUtils;
 import revel.storage.AliasStorage;
+
 
 /**
  * Parses user input into commands and command arguments.
  */
-public class Parser {
+public class Parser extends DateTimeParser {
     // alias -> command words
     private static final Map<String, CommandWord> ALIASES = new LinkedHashMap<>();
     // Built-in aliases (reserved)
@@ -61,15 +60,6 @@ public class Parser {
                       alias remove <alias>
                       alias list
                     """;
-    private static final DateTimeFormatter IN_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private static final DateTimeFormatter IN_YMD_HHMM = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-    private static final DateTimeFormatter IN_YMD_HH_COLON_MM = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    private static final DateTimeFormatter IN_DMY_HHMM = DateTimeFormatter
-            .ofPattern("d/M/yyyy HHmm"); // example: 2/12/2019 1800
-
-    // For printing
-    private static final DateTimeFormatter OUT_DATE = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final DateTimeFormatter OUT_DATE_TIME = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     // Record classes for storing parsed task commands
     /**
@@ -299,8 +289,8 @@ public class Parser {
             throw new RevelException(MESSAGE_MISSING_BY);
         }
 
-        String taskDesc = trimSubstringLeft(argsLine, "/by");
-        String rawDateTime = trimSubstringRight(argsLine, "/by");
+        String taskDesc = ParseStringUtils.trimSubstringLeft(argsLine, "/by");
+        String rawDateTime = ParseStringUtils.trimSubstringRight(argsLine, "/by");
 
         if (taskDesc.isEmpty() || rawDateTime.isEmpty()) {
             throw new RevelException(" Sorry, but the format used is invalid.\n"
@@ -336,9 +326,9 @@ public class Parser {
                     + "Usage: event <description> /from <start date> /to <end date>");
         }
 
-        String taskDesc = trimSubstringLeft(argsLine, "/from");
-        String startDate = trimSubstring(argsLine, "/from", "/to");
-        String endDate = trimSubstringRight(argsLine, "/to");
+        String taskDesc = ParseStringUtils.trimSubstringLeft(argsLine, "/from");
+        String startDate = ParseStringUtils.trimSubstring(argsLine, "/from", "/to");
+        String endDate = ParseStringUtils.trimSubstringRight(argsLine, "/to");
         if (taskDesc.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
             throw new RevelException(" Sorry, but the format used is invalid: one or more arguments are missing\n"
                     + "Usage: event <description> /from <start date> /to <end date>");
@@ -424,90 +414,6 @@ public class Parser {
     }
 
 
-    private static LocalDateTime parseToLocalDateTime(String raw) throws RevelException {
-        String s = raw.trim();
-
-        DateTimeFormatter[] dateTimeFormats = {IN_YMD_HHMM, IN_YMD_HH_COLON_MM, IN_DMY_HHMM};
-
-        // Try date-time formats first
-        DateTimeParseException last = null;
-        for (DateTimeFormatter f : dateTimeFormats) {
-            try {
-                return LocalDateTime.parse(s, f);
-            } catch (DateTimeParseException e) {
-                last = e; // record the failure (catch is no longer empty)
-            }
-        }
-
-        // Then try date-only
-        try {
-            LocalDate d = LocalDate.parse(s, IN_DATE);
-            return d.atStartOfDay(); // default time 00:00 if none given
-        } catch (DateTimeParseException e) {
-
-            throw new RevelException(
-                    """
-                             Sorry, but your date/time is invalid.
-                            Accepted formats:
-                              yyyy-MM-dd
-                              yyyy-MM-dd HHmm (e.g., 2019-12-02 1800)
-                              d/M/yyyy HHmm (e.g., 2/12/2019 1800)"""
-            );
-        }
-    }
-
-    /**
-     * Formats a date-time for user display.
-     *
-     * @param dt Date-time to format.
-     * @return Formatted string for output.
-     */
-    public static String formatForUser(LocalDateTime dt) {
-        // If you want date-only display when time is 00:00:
-        if (dt.getHour() == 0 && dt.getMinute() == 0) {
-            return dt.format(OUT_DATE);
-        }
-        return dt.format(OUT_DATE_TIME);
-    }
-
-    private static String trimSubstringLeft(String str, String delimiter) {
-        assert str != null : "str cannot be null";
-        assert delimiter != null : "delimiter cannot be null";
-        assert str.contains(delimiter) : "delimiter cannot be found";
-        return str.substring(0, str.indexOf(delimiter)).trim();
-    }
-
-    private static String trimSubstringRight(String str, String delimiter) {
-        assert str != null : "str cannot be null";
-        assert delimiter != null : "delimiter cannot be null";
-        assert str.contains(delimiter) : "delimiter cannot be found";
-        return str.substring(str.indexOf(delimiter) + delimiter.length()).trim();
-    }
-
-    /**
-     * Trims the substring between the given delimiters.
-     *
-     * @param str Input string.
-     * @param startDelimiter Start delimiter.
-     * @param endDelimiter End delimiter.
-     * @return Trimmed substring between the delimiters.
-     */
-    public static String trimSubstring(String str, String startDelimiter, String endDelimiter) {
-        assert str != null : "str cannot be null";
-        assert startDelimiter != null : "delimiter cannot be null";
-        assert endDelimiter != null : "delimiter cannot be null";
-
-
-        int startIndex = str.indexOf(startDelimiter);
-        int endIndex = str.indexOf(endDelimiter, startIndex);
-
-        assert startIndex >= 0 : "startDelimiter cannot be found";
-        assert endIndex >= 0 : "endDelimiter cannot be found";
-        assert endIndex >= startIndex : "endDelimiter index is before startLimiter index";
-        int start = startIndex + startDelimiter.length();
-
-        return str.substring(start, endIndex).trim();
-    }
 }
 
 

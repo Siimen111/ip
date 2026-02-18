@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 
 import revel.RevelException;
 import revel.command.Command;
+import revel.parser.AliasParser;
 import revel.parser.Parser;
 import revel.storage.AliasStorage;
 import revel.storage.Storage;
@@ -32,7 +33,7 @@ public class Revel {
         ui = new Ui();
         storage = new Storage(dataDirPath.resolve(TASKS_FILE_NAME));
         AliasStorage aliasStorage = new AliasStorage(dataDirPath.resolve(ALIASES_FILE_NAME));
-        Parser.setAliasStorage(aliasStorage);
+        AliasParser.setAliasStorage(aliasStorage);
         try {
             storedTasks = new TaskList(storage.load());
         } catch (RevelException e) {
@@ -40,7 +41,7 @@ public class Revel {
             storedTasks = new TaskList();
         }
         try {
-            Parser.replaceUserAliases(aliasStorage.load());
+            AliasParser.replaceUserAliases(aliasStorage.load());
         } catch (RevelException e) {
             System.out.println(ui.showError(e.getMessage()));
         }

@@ -24,8 +24,8 @@ public class AliasParserTest {
     @BeforeEach
     void setUp() throws Exception {
         AliasStorage aliasStorage = new AliasStorage(tempDir.resolve("aliases.json"));
-        Parser.setAliasStorage(aliasStorage);
-        Parser.replaceUserAliases(Map.of());
+        AliasParser.setAliasStorage(aliasStorage);
+        AliasParser.replaceUserAliases(Map.of());
     }
 
     @Test

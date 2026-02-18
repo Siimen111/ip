@@ -59,7 +59,6 @@ public class Storage {
         assert tasks != null : "tasks cannot be null";
         try {
             Files.createDirectories(filePath.getParent());
-            // List<String> lines = new ArrayList<>();
 
             List<String> lines = tasks.getTaskList()
                     .stream()

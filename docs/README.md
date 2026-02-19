@@ -2,7 +2,7 @@
 
 ![Ui.png](Ui.png)
 
-Revel is a desktop chatbot task manager for users who prefer typing over clicking.
+Revel is a desktop chatbot task manager for users who prefer typing to clicking.
 
 
 ## Quick Start

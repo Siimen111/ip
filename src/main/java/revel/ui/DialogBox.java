@@ -80,23 +80,14 @@ public class DialogBox extends HBox {
     }
     private void changeDialogStyle(String commandType) {
         switch (commandType) {
-        case "TodoCommand", "DeadlineCommand", "EventCommand":
-            dialog.getStyleClass().add("add-label");
-            break;
-        case "MarkCommand":
-            dialog.getStyleClass().add("marked-label");
-            break;
-        case "UnmarkCommand":
-            dialog.getStyleClass().add("unmarked-label");
-            break;
-        case "DeleteCommand":
-            dialog.getStyleClass().add("delete-label");
-            break;
-        case "ErrorCommand":
-            dialog.getStyleClass().add("error-label");
-            break;
-        default:
-            break;
+        case "TodoCommand", "DeadlineCommand", "EventCommand" -> dialog.getStyleClass().add("add-label");
+        case "MarkCommand" -> dialog.getStyleClass().add("marked-label");
+        case "UnmarkCommand" -> dialog.getStyleClass().add("unmarked-label");
+        case "DeleteCommand" -> dialog.getStyleClass().add("delete-label");
+        case "ErrorCommand" -> dialog.getStyleClass().add("error-label");
+        case "FindCommand", "ListCommand" -> dialog.getStyleClass().add("task-label");
+        default -> {
+        }
         }
     }
     public static DialogBox getRevelDialog(String text, Image img, String commandType) {

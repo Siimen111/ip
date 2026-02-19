@@ -57,6 +57,10 @@
     -fx-border-radius: 12 12 12 2;
 }
 
+.task-label {
+    -fx-background-color: #dea9f3;
+}
+
 .delete-label {
     -fx-background-color: lightpink;
 }

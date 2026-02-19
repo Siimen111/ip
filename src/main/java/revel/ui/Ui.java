@@ -11,8 +11,6 @@ import revel.task.TaskList;
  * Handles user interaction and console output.
  */
 public class Ui {
-    private static final String INTRO_LINE = " Hello! I'm Revel\n"
-                  + " What can I do for you?";
     final Scanner sc;
 
     /**
@@ -27,7 +25,8 @@ public class Ui {
      * Prints the introduction message.
      */
     public String showIntro() {
-        return INTRO_LINE;
+        return joinLines(" Hello! I'm Revel, a friendly assistant.",
+                " What can I do for you?");
     }
 
     /**
@@ -126,7 +125,8 @@ public class Ui {
      */
     public String showTaskMarked(Task task) {
         return joinLines(
-                " Nice! I've marked this task as done: ",
+                " Good Job!",
+                " I've marked this task as done: ",
                 task.toString());
     }
 

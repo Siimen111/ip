@@ -17,10 +17,17 @@ public final class ParseStringUtils {
      *                                  or if {@code delimiter} is not present in {@code str}
      */
     public static String trimSubstringLeft(String str, String delimiter) {
-        assert str != null : "str cannot be null";
-        assert delimiter != null : "delimiter cannot be null";
-        assert str.contains(delimiter) : "delimiter cannot be found";
-        return str.substring(0, str.indexOf(delimiter)).trim();
+        if (str == null) {
+            throw new IllegalArgumentException("str cannot be null");
+        }
+        if (delimiter == null) {
+            throw new IllegalArgumentException("delimiter cannot be null");
+        }
+        int delimiterIndex = str.indexOf(delimiter);
+        if (delimiterIndex < 0) {
+            throw new IllegalArgumentException("delimiter cannot be found");
+        }
+        return str.substring(0, delimiterIndex).trim();
     }
     /**
      * Returns the trimmed substring to the right of the first occurrence of {@code delimiter}.
@@ -32,10 +39,17 @@ public final class ParseStringUtils {
      *                                  or if {@code delimiter} is not present in {@code str}
      */
     public static String trimSubstringRight(String str, String delimiter) {
-        assert str != null : "str cannot be null";
-        assert delimiter != null : "delimiter cannot be null";
-        assert str.contains(delimiter) : "delimiter cannot be found";
-        return str.substring(str.indexOf(delimiter) + delimiter.length()).trim();
+        if (str == null) {
+            throw new IllegalArgumentException("str cannot be null");
+        }
+        if (delimiter == null) {
+            throw new IllegalArgumentException("delimiter cannot be null");
+        }
+        int delimiterIndex = str.indexOf(delimiter);
+        if (delimiterIndex < 0) {
+            throw new IllegalArgumentException("delimiter cannot be found");
+        }
+        return str.substring(delimiterIndex + delimiter.length()).trim();
     }
     /**
      * Trims the substring between the given delimiters.
@@ -46,17 +60,23 @@ public final class ParseStringUtils {
      * @return Trimmed substring between the delimiters.
      */
     public static String trimSubstring(String str, String startDelimiter, String endDelimiter) {
-        assert str != null : "str cannot be null";
-        assert startDelimiter != null : "delimiter cannot be null";
-        assert endDelimiter != null : "delimiter cannot be null";
-
-
+        if (str == null) {
+            throw new IllegalArgumentException("str cannot be null");
+        }
+        if (startDelimiter == null) {
+            throw new IllegalArgumentException("startDelimiter cannot be null");
+        }
+        if (endDelimiter == null) {
+            throw new IllegalArgumentException("endDelimiter cannot be null");
+        }
         int startIndex = str.indexOf(startDelimiter);
-        int endIndex = str.indexOf(endDelimiter, startIndex);
-
-        assert startIndex >= 0 : "startDelimiter cannot be found";
-        assert endIndex >= 0 : "endDelimiter cannot be found";
-        assert endIndex >= startIndex : "endDelimiter index is before startLimiter index";
+        if (startIndex < 0) {
+            throw new IllegalArgumentException("startDelimiter cannot be found");
+        }
+        int endIndex = str.indexOf(endDelimiter, startIndex + startDelimiter.length());
+        if (endIndex < 0) {
+            throw new IllegalArgumentException("endDelimiter cannot be found");
+        }
         int start = startIndex + startDelimiter.length();
 
         return str.substring(start, endIndex).trim();

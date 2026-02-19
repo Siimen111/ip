@@ -1,5 +1,7 @@
 package revel.ui;
 
+import java.io.InputStream;
+
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -20,6 +22,7 @@ import revel.parser.Parser;
  */
 public class MainWindow extends AnchorPane {
     private static final double EXIT_DELAY_SECONDS = 2.0;
+    private static final String REVEL_IMAGE_FILEPATH = "images/revel.png";
 
     @FXML
     private ScrollPane scrollPane;
@@ -31,11 +34,36 @@ public class MainWindow extends AnchorPane {
     private Button sendButton;
 
     private Revel revel;
-    private Image revelImage = new Image(this.getClass().getClassLoader().getResourceAsStream("images/revel.png"));
+    private final Image revelImage = loadRevelImage();
 
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+    }
+
+    /**
+     * Loads Revel's avatar image from the classpath.
+     * Returns the image if it can be read, or {@code null} if the resource is missing
+     * or cannot be loaded so the UI can continue without crashing.
+     *
+     * @return The loaded avatar image, or {@code null} if unavailable.
+     */
+    private Image loadRevelImage() {
+        return loadImageFromClasspath(this.getClass().getClassLoader(), REVEL_IMAGE_FILEPATH);
+    }
+
+    static Image loadImageFromClasspath(ClassLoader classLoader, String resourcePath) {
+        if (classLoader == null || resourcePath == null || resourcePath.isBlank()) {
+            return null;
+        }
+        try (InputStream imageStream = classLoader.getResourceAsStream(resourcePath)) {
+            if (imageStream == null) {
+                return null;
+            }
+            return new Image(imageStream);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /** Injects the Revel instance */

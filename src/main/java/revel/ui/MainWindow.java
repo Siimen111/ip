@@ -49,7 +49,14 @@ public class MainWindow extends AnchorPane {
      * @return The loaded avatar image, or {@code null} if unavailable.
      */
     private Image loadRevelImage() {
-        try (InputStream imageStream = this.getClass().getClassLoader().getResourceAsStream(REVEL_IMAGE_FILEPATH)) {
+        return loadImageFromClasspath(this.getClass().getClassLoader(), REVEL_IMAGE_FILEPATH);
+    }
+
+    static Image loadImageFromClasspath(ClassLoader classLoader, String resourcePath) {
+        if (classLoader == null || resourcePath == null || resourcePath.isBlank()) {
+            return null;
+        }
+        try (InputStream imageStream = classLoader.getResourceAsStream(resourcePath)) {
             if (imageStream == null) {
                 return null;
             }

@@ -18,7 +18,7 @@ import revel.ui.MainWindow;
 public class MainApp extends Application {
 
     private static final int MIN_WINDOW_HEIGHT = 220;
-    private static final int MIN_WINDOW_WIDTH = 417;
+    private static final int MIN_WINDOW_WIDTH = 500;
     private static final String DATA_DIR = "data/";
     private final Revel revel = new Revel(DATA_DIR);
 

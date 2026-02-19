@@ -2,6 +2,7 @@ package revel.task;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import revel.RevelException;
 
@@ -57,34 +58,40 @@ public abstract class Task {
      */
     public static Task fromFileString(String line) throws RevelException {
         String[] parts = line.split("\\s*\\|\\s*", -1);
+        try {
+            String type = parts[0];
+            TaskType taskType = TaskType.fromCode(type);
+            boolean isDone = parts[1].equals(DONE_FLAG);
+            String desc = parts[2];
 
-        String type = parts[0];
-        TaskType taskType = TaskType.fromCode(type);
-        boolean isDone = parts[1].equals(DONE_FLAG);
-        String desc = parts[2];
 
-        Task task;
-        switch (taskType) {
-        case TODO:
-            task = new ToDo(desc);
-            break;
-        case DEADLINE:
-            LocalDateTime byDate = LocalDateTime.parse(parts[3], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-            task = new Deadline(desc, byDate);
-            break;
-        case EVENT:
-            LocalDateTime fromDate = LocalDateTime.parse(parts[3], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-            LocalDateTime toDate = LocalDateTime.parse(parts[4], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-            task = new Event(desc, fromDate, toDate);
-            break;
-        default:
-            throw new RevelException("Unknown task type: " + type);
+            Task task;
+            switch (taskType) {
+            case TODO:
+                task = new ToDo(desc);
+                break;
+            case DEADLINE:
+                LocalDateTime byDate = LocalDateTime.parse(parts[3], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                task = new Deadline(desc, byDate);
+                break;
+            case EVENT:
+                LocalDateTime fromDate = LocalDateTime.parse(parts[3], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                LocalDateTime toDate = LocalDateTime.parse(parts[4], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                task = new Event(desc, fromDate, toDate);
+                break;
+            default:
+                throw new RevelException("Unknown task type: " + type);
+            }
+
+            if (isDone) {
+                task.markAsDone();
+            }
+            return task;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new RevelException("Invalid/Corrupt data!");
+        } catch (DateTimeParseException e) {
+            throw new RevelException("Invalid date format!");
         }
-
-        if (isDone) {
-            task.markAsDone();
-        }
-        return task;
     }
 
     /**
